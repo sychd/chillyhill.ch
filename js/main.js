@@ -10,7 +10,7 @@ const imageSources = [
 ];
 
 const minIntervalMs = 3_000;
-const maxIntervalMs = 23_000;
+const maxIntervalMs = 15_000;
 const imageFadeMs = 400;
 
 const imageElements = Array.from(document.querySelectorAll("[data-rotating-image]"));
