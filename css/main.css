@@ -118,25 +118,11 @@ button:focus-visible {
 
 .portrait-image {
   transform: rotate(-43deg);
-  position: absolute;
-  inset: 0;
   width: 100%;
   height: 100%;
   object-fit: cover;
   object-position: center;
   border-radius: 44%;
-  opacity: 0;
-  z-index: 0;
-  transition: opacity 400ms ease;
-}
-
-.portrait-image.is-active {
-  opacity: 1;
-  z-index: 1;
-}
-
-.portrait-image.is-entering {
-  z-index: 2;
 }
 
 .intro {
