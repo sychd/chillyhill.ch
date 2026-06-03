@@ -1,61 +1,172 @@
-const svg = document.querySelector("#orbit-background");
-
 const svgNamespace = "http://www.w3.org/2000/svg";
 const viewBoxSize = 1200;
-const columns = 33;
-const rows = 27;
-const marginX = 190;
-const marginY = 220;
 const palette = ["#7688ff", "#a15eff", "#d951ff", "#ff7f91", "#ff3f46"];
-const reducedMotionQuery = window.matchMedia("(prefers-reduced-motion: reduce)");
+const renderProfiles = {
+  desktop: {
+    columns: 33,
+    rows: 27,
+    marginX: 190,
+    marginY: 220,
+    includeDiagonalLinks: true,
+    minFrameMs: 1000 / 30,
+    useNodeGlow: true,
+  },
+  mobile: {
+    columns: 11,
+    rows: 9,
+    marginX: 255,
+    marginY: 275,
+    includeDiagonalLinks: false,
+    minFrameMs: 1000 / 16,
+    useNodeGlow: false,
+  },
+};
+
+const reducedMotionQuery = createMediaQuery("(prefers-reduced-motion: reduce)");
+const compactViewportQuery = createMediaQuery("(max-width: 720px)");
+const coarsePointerQuery = createMediaQuery("(pointer: coarse)");
+const svg = globalThis.document?.querySelector?.("#orbit-background");
 
 if (svg) {
   initializeOrbitBackground(svg);
 }
 
-function initializeOrbitBackground(svgElement) {
-  const { gradientStops, meshGroup, linkGroup, contourGroup, nodeGroup } = buildScene(svgElement);
-  const nodes = createNodes();
-  const links = createLinks(nodes);
-  const contourPaths = createContourPaths(contourGroup);
-  const linkPaths = links.map(() => createPath(linkGroup, "orbit-bg-link"));
-  const nodeCircles = nodes.map((node) => createCircle(nodeGroup, node));
+export function selectOrbitBackgroundProfile({
+  isCompactViewport = false,
+  isCoarsePointer = false,
+} = {}) {
+  return isCompactViewport || isCoarsePointer ? renderProfiles.mobile : renderProfiles.desktop;
+}
 
+function initializeOrbitBackground(svgElement) {
+  let profile = getCurrentRenderProfile();
+  let scene = buildOrbitScene(svgElement, profile);
   let animationFrame = 0;
+  let frameTimer = 0;
   let previousTimestamp = 0;
+  let lastRenderedTimestamp = 0;
   let phaseTime = 0;
 
   function render(timestamp = 0) {
     const elapsedTime = timestamp / 1000;
     const delta =
-      previousTimestamp === 0 ? 0 : Math.min((timestamp - previousTimestamp) / 1000, 0.08);
+      previousTimestamp === 0 ? 0 : Math.min((timestamp - previousTimestamp) / 1000, 0.12);
     const breath = breathingCurve(elapsedTime);
 
+    animationFrame = 0;
     previousTimestamp = timestamp;
+    lastRenderedTimestamp = timestamp;
     phaseTime += delta * breath.speed;
 
-    const projectedNodes = nodes.map((node) => projectNode(node, phaseTime, breath.amount));
+    updateProjectedNodes(scene.projectedNodes, scene.nodes, profile, phaseTime, breath.amount);
+    updateGradient(scene.gradientStops, phaseTime);
+    updateLinks(scene.linkPaths, scene.links, scene.projectedNodes, profile);
+    updateContours(scene.contourPaths, scene.projectedNodes, profile);
+    updateNodes(scene.nodeCircles, scene.projectedNodes);
+    scene.meshGroup.setAttribute("opacity", String(0.82 + breath.amount * 0.12));
 
-    updateGradient(gradientStops, phaseTime);
-    updateLinks(linkPaths, links, projectedNodes);
-    updateContours(contourPaths, projectedNodes);
-    updateNodes(nodeCircles, projectedNodes);
-    meshGroup.setAttribute("opacity", String(0.82 + breath.amount * 0.12));
+    scheduleRender();
+  }
 
-    if (!reducedMotionQuery.matches) {
-      animationFrame = window.requestAnimationFrame(render);
+  function scheduleRender() {
+    if (reducedMotionQuery.matches || globalThis.document?.hidden) {
+      return;
     }
+
+    const delay = Math.max(0, profile.minFrameMs - (performance.now() - lastRenderedTimestamp));
+
+    clearFrameTimer();
+    frameTimer = window.setTimeout(() => {
+      animationFrame = window.requestAnimationFrame(render);
+    }, delay);
+  }
+
+  function cancelRender() {
+    clearFrameTimer();
+
+    if (animationFrame) {
+      window.cancelAnimationFrame(animationFrame);
+      animationFrame = 0;
+    }
+  }
+
+  function clearFrameTimer() {
+    if (frameTimer) {
+      window.clearTimeout(frameTimer);
+      frameTimer = 0;
+    }
+  }
+
+  function renderStaticFrame() {
+    cancelRender();
+    previousTimestamp = 0;
+    lastRenderedTimestamp = 0;
+    render(0);
+  }
+
+  function rebuildScene() {
+    const nextProfile = getCurrentRenderProfile();
+
+    if (profile === nextProfile) {
+      return;
+    }
+
+    cancelRender();
+    profile = nextProfile;
+    scene = buildOrbitScene(svgElement, profile);
+    renderStaticFrame();
+  }
+
+  function handleVisibilityChange() {
+    if (globalThis.document?.hidden) {
+      cancelRender();
+      return;
+    }
+
+    previousTimestamp = 0;
+    scheduleRender();
   }
 
   render(0);
 
-  reducedMotionQuery.addEventListener("change", () => {
-    window.cancelAnimationFrame(animationFrame);
-    render(0);
+  addMediaQueryListener(reducedMotionQuery, "change", renderStaticFrame);
+  addMediaQueryListener(compactViewportQuery, "change", rebuildScene);
+  addMediaQueryListener(coarsePointerQuery, "change", rebuildScene);
+  globalThis.document?.addEventListener?.("visibilitychange", handleVisibilityChange);
+}
+
+function getCurrentRenderProfile() {
+  return selectOrbitBackgroundProfile({
+    isCompactViewport: compactViewportQuery.matches,
+    isCoarsePointer: coarsePointerQuery.matches,
   });
 }
 
-function buildScene(svgElement) {
+function buildOrbitScene(svgElement, profile) {
+  const { gradientStops, meshGroup, linkGroup, contourGroup, nodeGroup } = buildScene(
+    svgElement,
+    profile,
+  );
+  const nodes = createNodes(profile);
+  const links = createLinks(nodes, profile);
+  const projectedNodes = createProjectedNodes(nodes);
+  const contourPaths = createContourPaths(contourGroup, profile);
+  const linkPaths = links.map(() => createPath(linkGroup, "orbit-bg-link"));
+  const nodeCircles = nodes.map((node) => createCircle(nodeGroup, node));
+
+  return {
+    gradientStops,
+    meshGroup,
+    nodes,
+    links,
+    projectedNodes,
+    contourPaths,
+    linkPaths,
+    nodeCircles,
+  };
+}
+
+function buildScene(svgElement, profile) {
   svgElement.setAttribute("width", String(viewBoxSize));
   svgElement.setAttribute("height", String(viewBoxSize));
 
@@ -112,7 +223,12 @@ function buildScene(svgElement) {
       fill: "url(#orbit-bg-fade-gradient)",
     }),
   );
-  defs.append(gradient, nodeGlow, fadeGradient, fadeMask);
+
+  if (profile.useNodeGlow) {
+    defs.append(gradient, nodeGlow, fadeGradient, fadeMask);
+  } else {
+    defs.append(gradient, fadeGradient, fadeMask);
+  }
 
   const softShell = createElement("ellipse", {
     cx: "600",
@@ -137,10 +253,15 @@ function buildScene(svgElement) {
     "stroke-linecap": "round",
     "stroke-linejoin": "round",
   });
-  const nodeGroup = createElement("g", {
+  const nodeGroupAttributes = {
     fill: "url(#orbit-bg-gradient)",
-    filter: "url(#orbit-bg-node-glow)",
-  });
+  };
+  const nodeGroup = createElement(
+    "g",
+    profile.useNodeGlow
+      ? { ...nodeGroupAttributes, filter: "url(#orbit-bg-node-glow)" }
+      : nodeGroupAttributes,
+  );
 
   meshGroup.append(contourGroup, linkGroup, nodeGroup);
   svgElement.replaceChildren(defs, softShell, meshGroup);
@@ -148,46 +269,56 @@ function buildScene(svgElement) {
   return { gradientStops, meshGroup, linkGroup, contourGroup, nodeGroup };
 }
 
-function createNodes() {
-  const spacingX = (viewBoxSize - marginX * 2) / (columns - 1);
-  const spacingY = (viewBoxSize - marginY * 2) / (rows - 1);
+export function createNodes(profile = renderProfiles.desktop) {
+  const spacingX = (viewBoxSize - profile.marginX * 2) / (profile.columns - 1);
+  const spacingY = (viewBoxSize - profile.marginY * 2) / (profile.rows - 1);
 
-  return Array.from({ length: rows * columns }, (_, index) => {
-    const row = Math.floor(index / columns);
-    const column = index % columns;
+  return Array.from({ length: profile.rows * profile.columns }, (_, index) => {
+    const row = Math.floor(index / profile.columns);
+    const column = index % profile.columns;
     const seed = seededNoise(row * 31 + column * 17);
 
     return {
       row,
       column,
       seed,
-      baseX: marginX + column * spacingX + (seed - 0.5) * 20,
-      baseY: marginY + row * spacingY + (seededNoise(index + 91) - 0.5) * 26,
+      baseX: profile.marginX + column * spacingX + (seed - 0.5) * 20,
+      baseY: profile.marginY + row * spacingY + (seededNoise(index + 91) - 0.5) * 26,
     };
   });
 }
 
-function createLinks(nodes) {
+export function createLinks(nodes, profile = renderProfiles.desktop) {
   const links = [];
-  const nodeAt = (row, column) => nodes[row * columns + column];
+  const nodeAt = (row, column) => nodes[row * profile.columns + column];
 
-  for (let row = 0; row < rows; row += 1) {
-    for (let column = 0; column < columns; column += 1) {
+  for (let row = 0; row < profile.rows; row += 1) {
+    for (let column = 0; column < profile.columns; column += 1) {
       const source = nodeAt(row, column);
 
-      if (column < columns - 1) {
+      if (column < profile.columns - 1) {
         links.push({ source, target: nodeAt(row, column + 1), weight: 1 });
       }
 
-      if (row < rows - 1) {
+      if (row < profile.rows - 1) {
         links.push({ source, target: nodeAt(row + 1, column), weight: 0.82 });
       }
 
-      if (row < rows - 1 && column < columns - 1 && (row + column) % 2 === 0) {
+      if (
+        profile.includeDiagonalLinks &&
+        row < profile.rows - 1 &&
+        column < profile.columns - 1 &&
+        (row + column) % 2 === 0
+      ) {
         links.push({ source, target: nodeAt(row + 1, column + 1), weight: 0.54 });
       }
 
-      if (row < rows - 1 && column > 0 && (row + column) % 3 === 0) {
+      if (
+        profile.includeDiagonalLinks &&
+        row < profile.rows - 1 &&
+        column > 0 &&
+        (row + column) % 3 === 0
+      ) {
         links.push({ source, target: nodeAt(row + 1, column - 1), weight: 0.42 });
       }
     }
@@ -196,17 +327,33 @@ function createLinks(nodes) {
   return links;
 }
 
-function createContourPaths(group) {
-  return Array.from({ length: rows }, (_, index) => {
+function createProjectedNodes(nodes) {
+  return nodes.map((node) => ({
+    x: node.baseX,
+    y: node.baseY,
+    depth: 0,
+    opacity: 0.16,
+    radius: 2,
+  }));
+}
+
+function createContourPaths(group, profile) {
+  return Array.from({ length: profile.rows }, (_, index) => {
     const path = createPath(group, "orbit-bg-contour");
     path.setAttribute("stroke-width", String(1.25 + index * 0.06));
     return path;
   });
 }
 
-function projectNode(node, time, breathAmount) {
-  const centerX = (columns - 1) / 2;
-  const centerY = (rows - 1) / 2;
+function updateProjectedNodes(projectedNodes, nodes, profile, time, breathAmount) {
+  nodes.forEach((node, index) => {
+    projectNode(projectedNodes[index], node, profile, time, breathAmount);
+  });
+}
+
+function projectNode(projectedNode, node, profile, time, breathAmount) {
+  const centerX = (profile.columns - 1) / 2;
+  const centerY = (profile.rows - 1) / 2;
   const normalizedX = (node.column - centerX) / centerX;
   const normalizedY = (node.row - centerY) / centerY;
   const distance = Math.hypot(normalizedX, normalizedY);
@@ -219,21 +366,19 @@ function projectNode(node, time, breathAmount) {
   const perspective = 1 + height * 0.00155;
   const edgeFade = clamp(1 - distance * 0.34, 0.18, 1);
 
-  return {
-    ...node,
-    x: 600 + (node.baseX - 600) * perspective + Math.sin(time * 0.23 + node.seed * 8) * 5,
-    y: 600 + (node.baseY - 600) * perspective + height,
-    depth: height,
-    opacity: clamp((0.16 + (height + 58) / 190) * edgeFade, 0.08, 0.48),
-    radius: clamp(1.25 + (height + 58) / 48, 1.2, 3.7),
-  };
+  projectedNode.x =
+    600 + (node.baseX - 600) * perspective + Math.sin(time * 0.23 + node.seed * 8) * 5;
+  projectedNode.y = 600 + (node.baseY - 600) * perspective + height;
+  projectedNode.depth = height;
+  projectedNode.opacity = clamp((0.16 + (height + 58) / 190) * edgeFade, 0.08, 0.48);
+  projectedNode.radius = clamp(1.25 + (height + 58) / 48, 1.2, 3.7);
 }
 
-function updateLinks(paths, links, nodes) {
+function updateLinks(paths, links, nodes, profile) {
   paths.forEach((path, index) => {
     const link = links[index];
-    const source = nodes[link.source.row * columns + link.source.column];
-    const target = nodes[link.target.row * columns + link.target.column];
+    const source = nodes[link.source.row * profile.columns + link.source.column];
+    const target = nodes[link.target.row * profile.columns + link.target.column];
     const midpointX = (source.x + target.x) / 2;
     const midpointY = (source.y + target.y) / 2 - (source.depth + target.depth) * 0.08;
     const opacity = clamp((source.opacity + target.opacity) * 0.32 * link.weight, 0.04, 0.2);
@@ -249,10 +394,10 @@ function updateLinks(paths, links, nodes) {
   });
 }
 
-function updateContours(paths, nodes) {
+function updateContours(paths, nodes, profile) {
   paths.forEach((path, row) => {
-    const rowNodes = nodes.slice(row * columns, row * columns + columns);
-    const normalizedRow = row / Math.max(rows - 1, 1);
+    const rowNodes = nodes.slice(row * profile.columns, row * profile.columns + profile.columns);
+    const normalizedRow = row / Math.max(profile.rows - 1, 1);
     const opacity = 0.06 + Math.sin(normalizedRow * Math.PI) * 0.08;
 
     path.setAttribute("d", createSmoothPath(rowNodes));
@@ -371,4 +516,25 @@ function hexToRgb(hexColor) {
     Number.parseInt(hex.slice(2, 4), 16),
     Number.parseInt(hex.slice(4, 6), 16),
   ];
+}
+
+function createMediaQuery(query) {
+  if (typeof window !== "undefined" && typeof window.matchMedia === "function") {
+    return window.matchMedia(query);
+  }
+
+  return {
+    matches: false,
+    addEventListener: undefined,
+    removeEventListener: undefined,
+  };
+}
+
+function addMediaQueryListener(mediaQuery, eventName, listener) {
+  if (typeof mediaQuery.addEventListener === "function") {
+    mediaQuery.addEventListener(eventName, listener);
+    return;
+  }
+
+  mediaQuery.addListener?.(listener);
 }

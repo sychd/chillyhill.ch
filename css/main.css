@@ -217,6 +217,13 @@ button:focus-visible {
 }
 
 @media (max-width: 720px) {
+  .orbit-background {
+    width: min(140vmax, 52rem);
+    height: min(140vmax, 52rem);
+    opacity: 0.28;
+    filter: none;
+  }
+
   .site-main {
     min-height: auto;
     padding-block: var(--space-lg) var(--space-xl);
