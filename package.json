@@ -1,0 +1,26 @@
+{
+  "name": "chillyhill.ch",
+  "version": "1.0.0",
+  "description": "Welcome card",
+  "homepage": "https://github.com/sychd/chillyhill.ch#readme",
+  "bugs": {
+    "url": "https://github.com/sychd/chillyhill.ch/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/sychd/chillyhill.ch.git"
+  },
+  "license": "ISC",
+  "author": "dsych",
+  "type": "module",
+  "main": "js/index.js",
+  "scripts": {
+    "dev": "http-server . -a 127.0.0.1 -p 8080 -c-1",
+    "format": "biome format --write .",
+    "lint": "biome check ."
+  },
+  "devDependencies": {
+    "@biomejs/biome": "2.4.16",
+    "http-server": "14.1.1"
+  }
+}
