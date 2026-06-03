@@ -9,15 +9,17 @@ const renderProfiles = {
     marginY: 220,
     includeDiagonalLinks: true,
     minFrameMs: 1000 / 30,
+    nodeOpacityMultiplier: 1,
     useNodeGlow: true,
   },
   mobile: {
-    columns: 11,
+    columns: 13,
     rows: 9,
     marginX: 255,
     marginY: 275,
     includeDiagonalLinks: false,
     minFrameMs: 1000 / 16,
+    nodeOpacityMultiplier: 1.2,
     useNodeGlow: false,
   },
 };
@@ -370,7 +372,11 @@ function projectNode(projectedNode, node, profile, time, breathAmount) {
     600 + (node.baseX - 600) * perspective + Math.sin(time * 0.23 + node.seed * 8) * 5;
   projectedNode.y = 600 + (node.baseY - 600) * perspective + height;
   projectedNode.depth = height;
-  projectedNode.opacity = clamp((0.16 + (height + 58) / 190) * edgeFade, 0.08, 0.48);
+  projectedNode.opacity = clamp(
+    (0.16 + (height + 58) / 190) * edgeFade * profile.nodeOpacityMultiplier,
+    0.08,
+    0.58,
+  );
   projectedNode.radius = clamp(1.25 + (height + 58) / 48, 1.2, 3.7);
 }
 
