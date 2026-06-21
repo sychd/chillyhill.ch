@@ -158,6 +158,7 @@ button:focus-visible {
 
 .contact-section a {
   display: inline-flex;
+  max-width: 100%;
   min-height: 2rem;
   align-items: center;
   justify-content: center;
@@ -171,6 +172,12 @@ button:focus-visible {
     border-color var(--transition-fast),
     color var(--transition-fast),
     transform var(--transition-fast);
+}
+
+.contact-section a span {
+  min-width: 0;
+  overflow-wrap: anywhere;
+  text-align: center;
 }
 
 .contact-section svg {
@@ -188,6 +195,22 @@ button:focus-visible {
   border-color: currentColor;
   color: #4c1d95;
   transform: translateY(-0.125rem);
+}
+
+.follow-up-section {
+  display: grid;
+  width: min(100%, 40rem);
+  gap: var(--space-md);
+  margin-top: var(--space-lg);
+  padding-top: var(--space-lg);
+  border-top: 1px solid color-mix(in srgb, var(--color-text-muted), transparent 78%);
+}
+
+.follow-up-text {
+  margin: 0;
+  color: var(--color-text-muted);
+  font-size: clamp(0.95rem, 1.5vw, 1.05rem);
+  text-align: center;
 }
 
 .info-text {
