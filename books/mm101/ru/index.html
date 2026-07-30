@@ -109,31 +109,20 @@
         </figure>
       </article>
 
-      <section class="subscribe-section" aria-labelledby="subscribe-title">
-        <div class="subscribe-copy">
-          <h2 id="subscribe-title">Оставьте свой email</h2>
-          <p>
-            Если вам интересно получать новые материалы от автора, оставьте свой email-адрес.
-          </p>
-        </div>
-
-        <!-- Add the Substack publication URL as the form action and remove the disabled attributes. -->
-        <form class="subscribe-form" aria-describedby="subscribe-status">
-          <label class="sr-only" for="subscriber-email-ru">Email</label>
-          <input
-            id="subscriber-email-ru"
-            name="email"
-            type="email"
-            inputmode="email"
-            autocomplete="email"
-            placeholder="Ваш email"
-            disabled
-          >
-          <button type="submit" disabled>Подписаться</button>
-        </form>
-        <p id="subscribe-status" class="subscribe-status">
-          Подписка через Substack скоро появится.
+      <section class="subscribe-section" aria-labelledby="subscribe-note">
+        <p id="subscribe-note" class="subscribe-note">
+          <!-- todo: add text-->
         </p>
+
+        <iframe
+          class="subscribe-embed"
+          src="https://chillyhill.substack.com/embed?transparent=1"
+          title="Подписаться на Chilly Hill"
+          width="480"
+          height="150"
+          scrolling="no"
+          loading="lazy"
+        ></iframe>
       </section>
     </main>
 

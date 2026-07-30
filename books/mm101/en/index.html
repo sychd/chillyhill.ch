@@ -109,31 +109,20 @@
         </figure>
       </article>
 
-      <section class="subscribe-section" aria-labelledby="subscribe-title">
-        <div class="subscribe-copy">
-          <h2 id="subscribe-title">Leave your email address</h2>
-          <p>
-            If you’re interested in receiving new work from the author, leave your email address.
-          </p>
-        </div>
-
-        <!-- Add the Substack publication URL as the form action and remove the disabled attributes. -->
-        <form class="subscribe-form" aria-describedby="subscribe-status">
-          <label class="sr-only" for="subscriber-email-en">Email address</label>
-          <input
-            id="subscriber-email-en"
-            name="email"
-            type="email"
-            inputmode="email"
-            autocomplete="email"
-            placeholder="Your email address"
-            disabled
-          >
-          <button type="submit" disabled>Subscribe</button>
-        </form>
-        <p id="subscribe-status" class="subscribe-status">
-          Substack signup will be available soon.
+      <section class="subscribe-section" aria-labelledby="subscribe-note">
+        <p id="subscribe-note" class="subscribe-note">
+          <!-- todo: add text-->
         </p>
+
+        <iframe
+          class="subscribe-embed"
+          src="https://chillyhill.substack.com/embed?transparent=1"
+          title="Subscribe to Chilly Hill"
+          width="480"
+          height="150"
+          scrolling="no"
+          loading="lazy"
+        ></iframe>
       </section>
     </main>
 
