@@ -19,7 +19,10 @@
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700;900&display=swap" rel="stylesheet">
+    <link
+      href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700;900&family=Space+Mono:wght@700&display=swap"
+      rel="stylesheet"
+    >
     <link rel="icon" href="assets/svg/favicon.svg" type="image/svg+xml">
     <link rel="icon" href="favicon.ico" sizes="any">
     <link rel="stylesheet" href="css/main.css">
@@ -33,6 +36,18 @@
       aria-hidden="true"
       focusable="false"
     ></svg>
+
+    <header class="book-header max-w-container">
+      <a class="home-link" href="./" aria-label="Chilly Hill home">
+        <img src="assets/svg/favicon.svg" alt="" width="24" height="24">
+        <span>Chilly Hill</span>
+      </a>
+
+      <nav class="site-nav" aria-label="Main navigation">
+        <a href="blog/">Blog</a>
+        <a href="about/">About</a>
+      </nav>
+    </header>
 
     <main class="site-main">
       <section class="hero max-w-container" aria-labelledby="intro-title">
@@ -108,13 +123,7 @@
     </aside>
 
     <footer class="site-footer">
-      <small>&copy; <span id="current-year"></span> Chilly Hill</small> |
-        <a
-                href="about/"
-                aria-label="About"
-        >
-          <small>About</small>
-        </a>
+      <small>&copy; <span id="current-year"></span> Chilly Hill</small>
     </footer>
   </body>
 </html>

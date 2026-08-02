@@ -91,6 +91,61 @@ button:focus-visible {
   z-index: 1;
 }
 
+.book-header {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-lg);
+  padding-block: clamp(1.25rem, 4vw, 2.25rem);
+}
+
+.home-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.65rem;
+  color: var(--color-text);
+  font-family: "Space Mono", ui-monospace, monospace;
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.15em;
+  text-decoration: none;
+  text-transform: uppercase;
+  transition: color var(--transition-fast);
+}
+
+.home-link img {
+  width: 1.4rem;
+  height: 1.4rem;
+  border-radius: 0.35rem;
+}
+
+.home-link:hover {
+  color: var(--color-primary);
+}
+
+.site-nav {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.9rem;
+}
+
+.site-nav a {
+  color: var(--color-text-muted);
+  font-size: 0.82rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-decoration: none;
+  text-transform: uppercase;
+  transition: color var(--transition-fast);
+}
+
+.site-nav a:hover,
+.site-nav a[aria-current="page"] {
+  color: var(--color-primary);
+}
+
 .privacy-note {
   position: relative;
   z-index: 1;
@@ -251,26 +306,25 @@ button:focus-visible {
 
 .about-page .site-main {
   align-items: start;
-  min-height: calc(100vh - 6rem);
-  padding-block: clamp(2rem, 7vw, 5rem);
+  min-height: calc(100vh - 11rem);
+  padding-block: clamp(1rem, 4vw, 3rem) clamp(2rem, 7vw, 5rem);
 }
 
-.about-article {
+.blog-page .site-main {
+  align-items: start;
+  min-height: calc(100vh - 11rem);
+  padding-block: clamp(1rem, 4vw, 3rem) clamp(2rem, 7vw, 5rem);
+}
+
+.about-article,
+.blog-article {
   display: grid;
   max-width: 46rem;
   gap: var(--space-lg);
 }
 
-.about-kicker {
-  margin: 0;
-  color: var(--color-primary);
-  font-size: 0.82rem;
-  font-weight: 700;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-}
-
-.about-article h1 {
+.about-article h1,
+.blog-article h1 {
   margin: 0;
   font-size: clamp(2.4rem, 8vw, 5rem);
   font-weight: 900;
@@ -278,7 +332,8 @@ button:focus-visible {
   line-height: 0.95;
 }
 
-.about-copy {
+.about-copy,
+.blog-copy {
   display: grid;
   gap: var(--space-md);
   color: var(--color-text-muted);
@@ -286,7 +341,8 @@ button:focus-visible {
   text-align: justify;
 }
 
-.about-copy p {
+.about-copy p,
+.blog-copy p {
   margin: 0;
 }
 
@@ -334,6 +390,14 @@ button:focus-visible {
 
   .contact-email-row {
     display: contents;
+  }
+
+  .book-header {
+    align-items: flex-start;
+  }
+
+  .site-nav {
+    gap: 0.75rem;
   }
 }
 
