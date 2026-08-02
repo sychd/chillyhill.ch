@@ -9,7 +9,7 @@ document.addEventListener("DOMContentLoaded", () => {
   let rendition = null;
   let book = null;
 
-  if (!openBtn || !modal || !epubLink) return;
+  if (!openBtn || !closeBtn || !modal || !epubLink || !prevBtn || !nextBtn) return;
 
   const epubUrl = epubLink.getAttribute("href");
 
