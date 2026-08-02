@@ -249,6 +249,64 @@ button:focus-visible {
   font-size: var(--text-body-size);
 }
 
+.about-page .site-main {
+  align-items: start;
+  min-height: calc(100vh - 6rem);
+  padding-block: clamp(2rem, 7vw, 5rem);
+}
+
+.about-article {
+  display: grid;
+  max-width: 46rem;
+  gap: var(--space-lg);
+}
+
+.about-kicker {
+  margin: 0;
+  color: var(--color-primary);
+  font-size: 0.82rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.about-article h1 {
+  margin: 0;
+  font-size: clamp(2.4rem, 8vw, 5rem);
+  font-weight: 900;
+  letter-spacing: 0;
+  line-height: 0.95;
+}
+
+.about-copy {
+  display: grid;
+  gap: var(--space-md);
+  color: var(--color-text-muted);
+  font-size: var(--text-body-size);
+  text-align: justify;
+}
+
+.about-copy p {
+  margin: 0;
+}
+
+.text-link {
+  display: inline-flex;
+  align-items: center;
+  border-bottom: 1px solid color-mix(in srgb, var(--color-primary), transparent 58%);
+  color: var(--color-primary);
+  font-weight: 700;
+  text-decoration: none;
+  transition:
+    border-color var(--transition-fast),
+    color var(--transition-fast);
+}
+
+.text-link:hover {
+  border-color: currentColor;
+  color: #4c1d95;
+}
+
 .site-footer {
   padding: var(--space-lg);
   color: var(--color-text-muted);
