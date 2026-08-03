@@ -14,6 +14,7 @@ A lightweight static website built with semantic HTML, CSS, and modern vanilla J
 ├── books/                       # Localized book landing pages
 ├── css/                         # Shared and page-specific styles
 ├── js/                          # Shared and page-specific scripts
+├── scripts/                     # Static site build
 └── index.html                   # Home page
 ```
 
@@ -26,7 +27,13 @@ npm install
 npm run dev
 ```
 
-The local site is available at `http://127.0.0.1:8080`.
+`npm run dev` builds the site into `dist/` and serves it at `http://127.0.0.1:8080`.
+
+Create a production artifact without starting the server with:
+
+```sh
+npm run build
+```
 
 Before publishing, run:
 
@@ -38,7 +45,7 @@ Use `npm run format` to apply the configured Biome formatting rules.
 
 ## Blog posts
 
-Create a directory inside `blog/posts/` containing a `metadata.json` file and its cover image. The blog discovers posts from the directory listing at runtime, so the hosting environment must expose directory indexes for `blog/posts/`.
+Create a directory inside `blog/posts/` containing a `metadata.json` file and its cover image. The build scans these directories and generates `dist/blog/posts/index.json`; the generated file is not committed.
 
 ```json
 {

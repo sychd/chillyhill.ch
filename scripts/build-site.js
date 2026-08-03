@@ -1,0 +1,57 @@
+import { cp, mkdir, readdir, readFile, rm, writeFile } from "node:fs/promises";
+import path from "node:path";
+import { fileURLToPath } from "node:url";
+
+const projectRoot = fileURLToPath(new URL("../", import.meta.url));
+const outputDirectory = path.join(projectRoot, "dist");
+const postsDirectory = path.join(projectRoot, "blog", "posts");
+const publicEntries = [
+  "about",
+  "assets",
+  "blog",
+  "books",
+  "css",
+  "js",
+  "favicon.ico",
+  "index.html",
+  "robots.txt",
+];
+
+await rm(outputDirectory, { force: true, recursive: true });
+await mkdir(outputDirectory, { recursive: true });
+
+await Promise.all(
+  publicEntries.map((entry) => {
+    return cp(path.join(projectRoot, entry), path.join(outputDirectory, entry), {
+      recursive: true,
+      filter: (source) => path.basename(source) !== ".DS_Store",
+    });
+  }),
+);
+
+const postDirectories = (await readdir(postsDirectory, { withFileTypes: true }))
+  .filter((entry) => entry.isDirectory())
+  .sort((left, right) => left.name.localeCompare(right.name));
+
+const posts = await Promise.all(
+  postDirectories.map(async (directory) => {
+    const metadataPath = path.join(postsDirectory, directory.name, "metadata.json");
+    const metadata = JSON.parse(await readFile(metadataPath, "utf8"));
+
+    if (!metadata.name || !metadata.link) {
+      throw new Error(`${metadataPath} must define name and link.`);
+    }
+
+    return {
+      title: metadata.name,
+      description: metadata.description || "",
+      link: metadata.link,
+      cover: metadata.cover ? path.posix.join("posts", directory.name, metadata.cover) : "",
+    };
+  }),
+);
+
+const postsIndexPath = path.join(outputDirectory, "blog", "posts", "index.json");
+await writeFile(postsIndexPath, `${JSON.stringify({ posts }, null, 2)}\n`);
+
+console.log(`Built ${publicEntries.length} site entries and ${posts.length} blog post(s).`);

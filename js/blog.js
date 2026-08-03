@@ -6,53 +6,24 @@ if (postsContainer) {
 
 async function renderBlogPosts(container) {
   try {
-    const listingResponse = await fetch("./posts/", { cache: "no-store" });
+    const response = await fetch("./posts/index.json", { cache: "no-store" });
 
-    if (!listingResponse.ok) {
-      throw new Error(`Unable to load posts listing (${listingResponse.status})`);
+    if (!response.ok) {
+      throw new Error(`Unable to load posts (${response.status})`);
     }
 
-    const listingHtml = await listingResponse.text();
-    const listingDocument = new DOMParser().parseFromString(listingHtml, "text/html");
-    const postsRoot = new URL("./", listingResponse.url);
-    const postUrls = [...listingDocument.querySelectorAll('a[href$="/"]')]
-      .map((link) => new URL(link.getAttribute("href"), listingResponse.url))
-      .filter((url) => url.pathname.startsWith(postsRoot.pathname))
-      .filter((url) => url.pathname !== postsRoot.pathname)
-      .map((url) => url.toString())
-      .filter((url, index, urls) => urls.indexOf(url) === index);
+    const { posts } = await response.json();
 
-    const posts = await Promise.all(postUrls.map(loadPost));
-    const publishedPosts = posts.filter(Boolean);
-
-    if (publishedPosts.length === 0) {
+    if (posts.length === 0) {
       renderStatus(container, "No posts have been published yet.");
       return;
     }
 
-    container.replaceChildren(...publishedPosts.map(createPostCard));
+    container.replaceChildren(...posts.map(createPostCard));
   } catch (error) {
     console.error("Unable to render blog posts", error);
     renderStatus(container, "Unable to load posts right now.");
   }
-}
-
-async function loadPost(postUrl) {
-  const metadataUrl = new URL("metadata.json", postUrl);
-  const response = await fetch(metadataUrl, { cache: "no-store" });
-
-  if (!response.ok) {
-    return null;
-  }
-
-  const metadata = await response.json();
-
-  return {
-    title: metadata.name || "Untitled post",
-    description: metadata.description || "",
-    link: metadata.link || postUrl,
-    cover: metadata.cover ? new URL(metadata.cover, metadataUrl).toString() : "",
-  };
 }
 
 function createPostCard(post) {

@@ -15,7 +15,9 @@
   "author": "dsych",
   "type": "module",
   "scripts": {
-    "dev": "http-server . -a 127.0.0.1 -p 8080 -c-1",
+    "build": "node scripts/build-site.js",
+    "predev": "npm run build",
+    "dev": "http-server dist -a 127.0.0.1 -p 8080 -c-1",
     "format": "biome format --write .",
     "lint": "biome check ."
   },
