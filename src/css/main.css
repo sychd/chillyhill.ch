@@ -24,8 +24,6 @@
 
   --layer-content: 1;
   --layer-header: 2;
-  --layer-modal: 10;
-  --layer-modal-controls: 11;
 
   --transition-fast: 150ms ease;
 
@@ -73,12 +71,7 @@ a {
   color: inherit;
 }
 
-button {
-  font: inherit;
-}
-
-a:focus-visible,
-button:focus-visible {
+a:focus-visible {
   outline: 3px solid var(--color-focus);
   outline-offset: 4px;
 }

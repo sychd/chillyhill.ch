@@ -40,14 +40,6 @@ export function selectOrbitBackgroundProfile({
   return isCompactViewport || isCoarsePointer ? renderProfiles.mobile : renderProfiles.desktop;
 }
 
-export function shouldPauseOrbitBackground({
-  isDocumentHidden = false,
-  isReaderOpen = false,
-  prefersReducedMotion = false,
-} = {}) {
-  return isDocumentHidden || isReaderOpen || prefersReducedMotion;
-}
-
 function initializeOrbitBackground(svgElement) {
   let profile = getCurrentRenderProfile();
   let scene = buildOrbitScene(svgElement, profile);
@@ -79,7 +71,7 @@ function initializeOrbitBackground(svgElement) {
   }
 
   function scheduleRender() {
-    if (isAnimationPaused()) {
+    if (reducedMotionQuery.matches || globalThis.document?.hidden) {
       return;
     }
 
@@ -114,16 +106,8 @@ function initializeOrbitBackground(svgElement) {
     render(0);
   }
 
-  function isAnimationPaused() {
-    return shouldPauseOrbitBackground({
-      isDocumentHidden: Boolean(globalThis.document?.hidden),
-      isReaderOpen: Boolean(globalThis.document?.body?.classList.contains("reader-is-open")),
-      prefersReducedMotion: reducedMotionQuery.matches,
-    });
-  }
-
-  function handlePageStateChange() {
-    if (isAnimationPaused()) {
+  function handleVisibilityChange() {
+    if (globalThis.document?.hidden) {
       cancelRender();
       return;
     }
@@ -150,14 +134,7 @@ function initializeOrbitBackground(svgElement) {
   addMediaQueryListener(reducedMotionQuery, "change", renderStaticFrame);
   addMediaQueryListener(compactViewportQuery, "change", rebuildScene);
   addMediaQueryListener(coarsePointerQuery, "change", rebuildScene);
-  globalThis.document?.addEventListener?.("visibilitychange", handlePageStateChange);
-
-  if (typeof MutationObserver === "function" && globalThis.document?.body) {
-    new MutationObserver(handlePageStateChange).observe(globalThis.document.body, {
-      attributeFilter: ["class"],
-      attributes: true,
-    });
-  }
+  globalThis.document?.addEventListener?.("visibilitychange", handleVisibilityChange);
 }
 
 function getCurrentRenderProfile() {

@@ -51,12 +51,7 @@
   <link rel="stylesheet" href="../../../css/main.css">
   <link rel="stylesheet" href="../../../css/book.css">
 
-  <!-- ePub.js & JSZip via CDN -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/epubjs@0.3.93/dist/epub.min.js"></script>
-
   <script type="module" src="../../../js/main.js"></script>
-  <script type="module" src="../../../js/book.js"></script>
 </head>
 <body class="book-page">
 <svg
@@ -112,20 +107,20 @@
           <span>Download PDF</span>
         </a>
         <a
-                id="epub-download-link"
                 class="button button-secondary"
                 href="../../../assets/books/magic-mushrooms-101-en/magic-mushrooms-101-en.epub"
                 download
         >
           <span>Download ePub</span>
         </a>
-        <button
-                type="button"
-                id="open-reader-btn"
+        <a
                 class="button button-secondary"
+                href="../../../assets/books/magic-mushrooms-101-en/magic-mushrooms-101-en.pdf"
+                target="_blank"
+                rel="noopener noreferrer"
         >
           <span>Read online</span>
-        </button>
+        </a>
       </div>
     </div>
 
@@ -157,52 +152,6 @@
     ></iframe>
   </section>
 </main>
-
-<div
-        id="reader-modal"
-        class="reader-modal"
-        aria-hidden="true"
-        aria-label="Online book reader"
-        aria-modal="true"
-        role="dialog"
->
-  <header class="reader-toolbar">
-    <div class="reader-font-controls" aria-label="Text size">
-      <button type="button" id="decrease-font-btn" class="reader-tool-button" aria-label="Decrease text size">A−</button>
-      <output id="font-size-value" class="reader-font-value" aria-live="polite">100%</output>
-      <button type="button" id="increase-font-btn" class="reader-tool-button" aria-label="Increase text size">A+</button>
-    </div>
-    <button
-            type="button"
-            id="close-reader-btn"
-            class="reader-tool-button reader-close-btn"
-            aria-label="Close reader"
-    >&times;</button>
-  </header>
-  <div id="epub-viewer" class="epub-viewer"></div>
-  <button
-          type="button"
-          id="previous-page-btn"
-          class="reader-page-control reader-page-control-previous"
-          aria-label="Previous page"
-          disabled
-  ><span class="reader-page-control-icon" aria-hidden="true">&lsaquo;</span></button>
-  <button
-          type="button"
-          id="next-page-btn"
-          class="reader-page-control reader-page-control-next"
-          aria-label="Next page"
-          disabled
-  ><span class="reader-page-control-icon" aria-hidden="true">&rsaquo;</span></button>
-  <footer class="reader-status" aria-live="polite">
-    <output
-            id="reader-page-status"
-            data-page-template="Page {current} of {total}"
-            data-error-label="Unable to open the book"
-    >Preparing pages…</output>
-    <output id="reader-progress-status" class="reader-progress-status">0%</output>
-  </footer>
-</div>
 
 <footer class="site-footer">
   <small>&copy; <span id="current-year"></span> Chilly Hill</small>
