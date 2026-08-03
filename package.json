@@ -16,13 +16,12 @@
   "type": "module",
   "scripts": {
     "build": "node scripts/build-site.js",
-    "predev": "npm run build",
-    "dev": "http-server dist -a 127.0.0.1 -p 8080 -c-1",
+    "dev": "node scripts/dev-site.js",
     "format": "biome format --write .",
     "lint": "biome check ."
   },
   "devDependencies": {
     "@biomejs/biome": "2.4.16",
-    "http-server": "14.1.1"
+    "browser-sync": "3.0.4"
   }
 }

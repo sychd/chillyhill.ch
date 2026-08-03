@@ -43,6 +43,8 @@ document.addEventListener("DOMContentLoaded", () => {
     decreaseFontButton: document.getElementById("decrease-font-btn"),
     increaseFontButton: document.getElementById("increase-font-btn"),
     fontSizeValue: document.getElementById("font-size-value"),
+    previousPageButton: document.getElementById("previous-page-btn"),
+    nextPageButton: document.getElementById("next-page-btn"),
     pageStatus: document.getElementById("reader-page-status"),
     progressStatus: document.getElementById("reader-progress-status"),
   };
@@ -56,6 +58,7 @@ document.addEventListener("DOMContentLoaded", () => {
   let locationsReady = false;
   let fontSize = FONT_SIZE.default;
   let previouslyFocusedElement = null;
+  let isNavigating = false;
 
   const updateFontControls = () => {
     elements.fontSizeValue.value = `${fontSize}%`;
@@ -78,6 +81,11 @@ document.addEventListener("DOMContentLoaded", () => {
 
   const updateReadingPosition = (location = latestLocation) => {
     latestLocation = location;
+
+    const readerReady = Boolean(rendition && location);
+    elements.previousPageButton.disabled =
+      isNavigating || !readerReady || Boolean(location?.atStart);
+    elements.nextPageButton.disabled = isNavigating || !readerReady || Boolean(location?.atEnd);
 
     if (!locationsReady || !book || !location?.start?.cfi) return;
 
@@ -124,6 +132,8 @@ document.addEventListener("DOMContentLoaded", () => {
   };
 
   const showReaderError = () => {
+    elements.previousPageButton.disabled = true;
+    elements.nextPageButton.disabled = true;
     elements.pageStatus.textContent = elements.pageStatus.dataset.errorLabel;
     elements.progressStatus.textContent = "";
   };
@@ -138,8 +148,8 @@ document.addEventListener("DOMContentLoaded", () => {
     rendition = book.renderTo("epub-viewer", {
       width: "100%",
       height: "100%",
-      manager: "continuous",
-      flow: "scrolled",
+      manager: "default",
+      flow: "paginated",
       spread: "none",
     });
 
@@ -174,9 +184,36 @@ document.addEventListener("DOMContentLoaded", () => {
     previouslyFocusedElement?.focus();
   };
 
+  const navigate = async (direction) => {
+    if (!rendition || isNavigating) return;
+
+    isNavigating = true;
+    updateReadingPosition();
+
+    try {
+      await rendition[direction]();
+    } finally {
+      isNavigating = false;
+      updateReadingPosition(rendition.currentLocation());
+    }
+  };
+
   function handleKeyPress(event) {
-    if (event.key === "Escape" && elements.modal.classList.contains("is-open")) {
+    if (!elements.modal.classList.contains("is-open")) return;
+
+    if (event.key === "Escape") {
       closeReader();
+      return;
+    }
+
+    if (event.key === "ArrowLeft") {
+      event.preventDefault();
+      void navigate("prev");
+    }
+
+    if (event.key === "ArrowRight") {
+      event.preventDefault();
+      void navigate("next");
     }
   }
 
@@ -189,6 +226,12 @@ document.addEventListener("DOMContentLoaded", () => {
   });
   elements.increaseFontButton.addEventListener("click", () => {
     setFontSize(fontSize + FONT_SIZE.step);
+  });
+  elements.previousPageButton.addEventListener("click", () => {
+    void navigate("prev");
+  });
+  elements.nextPageButton.addEventListener("click", () => {
+    void navigate("next");
   });
   document.addEventListener("keydown", handleKeyPress);
 });
