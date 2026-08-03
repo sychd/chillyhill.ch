@@ -93,11 +93,7 @@ async function renderBlogPosts(container) {
       title.className = "post-card-title";
       title.textContent = post.title;
 
-      //   const description = document.createElement("p");
-      //   description.className = "post-card-description";
-      //   description.textContent = post.description;
-      //   body.append(title, description);
-
+      body.append(title);
       cardLink.append(media, body);
 
       return cardLink;
