@@ -203,6 +203,10 @@
 }
 
 @media (max-width: 520px) {
+  .book-language-row {
+    margin-top: 0;
+  }
+
   .book-main {
     padding-top: 0.75rem;
   }
@@ -255,7 +259,7 @@
   display: flex;
   align-items: center;
   color: var(--color-text);
-  background: color-mix(in srgb, var(--color-surface), var(--color-bg) 35%);
+  background: color-mix(in srgb, var(--color-surface), var(--color-bg) 22%);
 }
 
 .reader-toolbar {
@@ -263,13 +267,17 @@
   min-height: 4rem;
   padding: max(0.5rem, env(safe-area-inset-top)) max(0.75rem, env(safe-area-inset-right)) 0.5rem
     max(0.75rem, env(safe-area-inset-left));
-  border-bottom: 1px solid var(--color-border-primary);
+  box-shadow: 0 0.25rem 1rem rgba(33, 24, 63, 0.06);
 }
 
 .reader-font-controls {
   display: inline-flex;
   align-items: center;
-  gap: 0.35rem;
+  gap: 0.15rem;
+  padding: 0.25rem;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--color-text), transparent 94%);
+  box-shadow: 0 0.2rem 0.75rem rgba(33, 24, 63, 0.08);
 }
 
 .reader-tool-button {
@@ -277,10 +285,10 @@
   width: var(--interactive-size);
   height: var(--interactive-size);
   padding: 0;
-  border: 1px solid var(--color-border-primary);
-  border-radius: var(--radius-sm);
+  border: 0;
+  border-radius: 999px;
   color: var(--color-text);
-  background: var(--color-surface);
+  background: transparent;
   font: inherit;
   font-weight: 700;
   line-height: 1;
@@ -288,14 +296,22 @@
   place-items: center;
   transition:
     color var(--transition-fast),
-    border-color var(--transition-fast),
-    background-color var(--transition-fast);
+    background-color var(--transition-fast),
+    transform var(--transition-fast);
 }
 
 .reader-tool-button:hover:not(:disabled) {
-  border-color: var(--color-primary);
-  color: var(--color-surface);
-  background: var(--color-primary);
+  color: var(--color-text);
+  background: color-mix(in srgb, var(--color-text), transparent 90%);
+}
+
+.reader-tool-button:active:not(:disabled) {
+  transform: scale(0.94);
+}
+
+.reader-tool-button:focus-visible {
+  outline: 2px solid color-mix(in srgb, var(--color-text), transparent 48%);
+  outline-offset: 2px;
 }
 
 .reader-tool-button:disabled {
@@ -305,24 +321,31 @@
 
 .reader-font-value {
   min-width: 3.8rem;
+  padding: 0.48rem 0.55rem;
+  border-radius: 999px;
   color: var(--color-text-muted);
+  background: var(--color-surface);
   font-size: 0.82rem;
   font-weight: 700;
   text-align: center;
+  box-shadow: 0 0.1rem 0.45rem rgba(33, 24, 63, 0.08);
 }
 
 .reader-close-btn {
   font-size: 1.65rem;
   font-weight: 400;
+  background: color-mix(in srgb, var(--color-text), transparent 94%);
+  box-shadow: 0 0.2rem 0.75rem rgba(33, 24, 63, 0.08);
 }
 
 .epub-viewer {
-  width: min(100%, 60rem);
+  width: 100%;
   min-height: 0;
   height: 100%;
-  margin: 0 auto;
+  margin: 0;
   overflow: hidden;
   background: #fefefe;
+  justify-self: stretch;
 }
 
 .reader-status {
@@ -331,23 +354,17 @@
   gap: 0.65rem;
   padding: 0.55rem max(1rem, env(safe-area-inset-right)) max(0.55rem, env(safe-area-inset-bottom))
     max(1rem, env(safe-area-inset-left));
-  border-top: 1px solid var(--color-border-primary);
   color: var(--color-text-muted);
   font-size: 0.78rem;
   font-weight: 700;
   text-align: center;
+  box-shadow: 0 -0.25rem 1rem rgba(33, 24, 63, 0.06);
 }
 
 .reader-progress-status:not(:empty)::before {
   margin-right: 0.65rem;
   color: color-mix(in srgb, var(--color-text-muted), transparent 55%);
   content: "•";
-}
-
-@media (min-width: 64rem) {
-  .epub-viewer {
-    border-inline: 1px solid var(--color-border-primary);
-  }
 }
 
 @media (max-width: 40rem) {

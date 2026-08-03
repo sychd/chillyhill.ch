@@ -7,6 +7,33 @@ const FONT_SIZE = {
 
 const LOCATION_BREAK_LENGTH = 1600;
 
+const CHAPTER_SELECTOR = "section.level1:not(.toc-title):not(.unlisted)";
+
+const READER_THEME = {
+  body: {
+    width: "100% !important",
+    "max-width": "48rem !important",
+    "margin-left": "auto !important",
+    "margin-right": "auto !important",
+    "padding-left": "clamp(1.25rem, 6vw, 4rem) !important",
+    "padding-right": "clamp(1.25rem, 6vw, 4rem) !important",
+  },
+  [CHAPTER_SELECTOR]: {
+    "padding-top": "clamp(3rem, 8vh, 5rem)",
+  },
+  [`${CHAPTER_SELECTOR}::before`]: {
+    display: "block",
+    width: "4rem",
+    height: "1px",
+    margin: "0 auto clamp(2.5rem, 6vh, 4rem)",
+    background: "#d8dde5",
+    content: '""',
+  },
+  [`${CHAPTER_SELECTOR} > h1:first-child`]: {
+    "margin-bottom": "clamp(2rem, 5vh, 3.5rem)",
+  },
+};
+
 document.addEventListener("DOMContentLoaded", () => {
   const elements = {
     openButton: document.getElementById("open-reader-btn"),
@@ -116,6 +143,7 @@ document.addEventListener("DOMContentLoaded", () => {
       spread: "none",
     });
 
+    rendition.themes.default(READER_THEME);
     rendition.themes.fontSize(`${fontSize}%`);
     rendition.on("relocated", updateReadingPosition);
     rendition.on("keyup", handleKeyPress);

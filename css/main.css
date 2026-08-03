@@ -234,12 +234,6 @@ button:focus-visible {
   gap: var(--space-md) var(--space-lg);
 }
 
-.contact-email-row {
-  display: flex;
-  flex: 1 0 100%;
-  justify-content: center;
-}
-
 .contact-section a {
   display: inline-flex;
   max-width: 100%;
@@ -373,10 +367,6 @@ button:focus-visible {
     gap: var(--space-sm) var(--space-md);
   }
 
-  .contact-email-row {
-    display: contents;
-  }
-
   .site-header {
     align-items: flex-start;
   }
@@ -388,6 +378,19 @@ button:focus-visible {
   .info-text,
   .about-copy {
     text-align: start;
+  }
+}
+
+@media (max-width: 520px) {
+  .site-header {
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0.25rem;
+  }
+
+  .site-nav {
+    width: 100%;
+    justify-content: center;
   }
 }
 
