@@ -1,5 +1,5 @@
 import {
-  READER_RENDER_OPTIONS,
+  createReaderRenderOptions,
   READER_THEME,
   resizeRenditionToContainer,
 } from "./book-reader-config.js";
@@ -133,7 +133,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     book = window.ePub(epubUrl);
-    rendition = book.renderTo("epub-viewer", READER_RENDER_OPTIONS);
+    rendition = book.renderTo("epub-viewer", createReaderRenderOptions());
 
     rendition.themes.default(READER_THEME);
     rendition.themes.fontSize(`${fontSize}%`);

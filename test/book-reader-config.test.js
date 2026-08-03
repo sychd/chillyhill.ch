@@ -1,13 +1,13 @@
 import assert from "node:assert/strict";
 import test from "node:test";
 import {
-  READER_RENDER_OPTIONS,
+  createReaderRenderOptions,
   READER_THEME,
   resizeRenditionToContainer,
 } from "../src/js/book-reader-config.js";
 
 test("the reader always renders a single paginated page", () => {
-  assert.deepEqual(READER_RENDER_OPTIONS, {
+  assert.deepEqual(createReaderRenderOptions(), {
     width: "100%",
     height: "100%",
     manager: "default",
@@ -15,6 +15,20 @@ test("the reader always renders a single paginated page", () => {
     spread: "none",
     allowScriptedContent: false,
   });
+});
+
+test("each rendition receives independent mutable settings", () => {
+  const firstOptions = createReaderRenderOptions();
+  const secondOptions = createReaderRenderOptions();
+
+  firstOptions.width = 320;
+  firstOptions.flow = "scrolled";
+
+  assert.notEqual(firstOptions, secondOptions);
+  assert.equal(firstOptions.width, 320);
+  assert.equal(firstOptions.flow, "scrolled");
+  assert.equal(secondOptions.width, "100%");
+  assert.equal(secondOptions.flow, "paginated");
 });
 
 test("the EPUB document width includes its responsive page gutters", () => {

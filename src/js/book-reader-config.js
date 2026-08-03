@@ -1,4 +1,4 @@
-export const READER_RENDER_OPTIONS = Object.freeze({
+const READER_RENDER_OPTIONS = Object.freeze({
   width: "100%",
   height: "100%",
   manager: "default",
@@ -6,6 +6,10 @@ export const READER_RENDER_OPTIONS = Object.freeze({
   spread: "none",
   allowScriptedContent: false,
 });
+
+export function createReaderRenderOptions() {
+  return { ...READER_RENDER_OPTIONS };
+}
 
 export const READER_THEME = {
   html: {
