@@ -18,7 +18,8 @@
     "build": "node scripts/build-site.js",
     "dev": "node scripts/dev-site.js",
     "format": "biome format --write .",
-    "lint": "biome check ."
+    "lint": "biome check .",
+    "test": "node --test"
   },
   "devDependencies": {
     "@biomejs/biome": "2.4.16",

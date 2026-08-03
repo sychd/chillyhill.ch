@@ -127,10 +127,6 @@
   background: var(--color-primary);
 }
 
-.button-primary:hover {
-  background: color-mix(in srgb, var(--color-primary), black 16%);
-}
-
 .button-secondary {
   color: var(--color-primary);
   background: transparent;
@@ -178,11 +174,6 @@
   max-width: 100%;
   border: 0;
   background: transparent;
-}
-
-.book-footer {
-  z-index: var(--layer-content);
-  margin-top: 0;
 }
 
 @media (max-width: 820px) {
@@ -237,8 +228,8 @@
   inset: 0;
   z-index: var(--layer-modal);
   display: none;
-  width: 100vw;
-  height: 100dvh;
+  min-width: var(--page-min-width);
+  min-height: 100dvh;
   overflow: hidden;
   background: var(--color-surface);
 }
@@ -257,6 +248,7 @@
   position: relative;
   z-index: var(--layer-modal-controls);
   display: flex;
+  min-width: 0;
   align-items: center;
   color: var(--color-text);
   background: color-mix(in srgb, var(--color-surface), var(--color-bg) 22%);
@@ -344,12 +336,18 @@
   grid-column: 1;
   grid-row: 2;
   width: 100%;
+  min-width: 0;
   min-height: 0;
   height: 100%;
   margin: 0;
   overflow: hidden;
   background: #fefefe;
   justify-self: stretch;
+}
+
+.epub-viewer > div,
+.epub-viewer iframe {
+  max-width: 100%;
 }
 
 .reader-page-control {
@@ -444,11 +442,6 @@
     min-height: 3.5rem;
   }
 
-  .reader-tool-button {
-    width: 2.75rem;
-    height: 2.75rem;
-  }
-
   .reader-font-value {
     min-width: 3.25rem;
     font-size: 0.76rem;
@@ -457,10 +450,6 @@
   .reader-status {
     min-height: 2.75rem;
     font-size: 0.72rem;
-  }
-
-  .reader-page-control {
-    width: 3.5rem;
   }
 
   .reader-page-control-icon {

@@ -17,6 +17,7 @@
 
   --container-width: 68rem;
   --content-width: 40rem;
+  --page-min-width: 20.125rem;
   --page-gutter: clamp(2rem, 7vw, 5rem);
   --header-padding: clamp(1.25rem, 4vw, 2.25rem);
   --interactive-size: 2.75rem;
@@ -40,13 +41,14 @@
 }
 
 html {
-  min-width: 320px;
+  min-width: var(--page-min-width);
   background: var(--color-bg);
   scroll-behavior: smooth;
 }
 
 body {
   position: relative;
+  min-width: var(--page-min-width);
   min-height: 100dvh;
   margin: 0;
   overflow-x: clip;

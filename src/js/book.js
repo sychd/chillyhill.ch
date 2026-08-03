@@ -1,3 +1,9 @@
+import {
+  READER_RENDER_OPTIONS,
+  READER_THEME,
+  resizeRenditionToContainer,
+} from "./book-reader-config.js";
+
 const FONT_SIZE = {
   default: 100,
   min: 80,
@@ -6,33 +12,6 @@ const FONT_SIZE = {
 };
 
 const LOCATION_BREAK_LENGTH = 1600;
-
-const CHAPTER_SELECTOR = "section.level1:not(.toc-title):not(.unlisted)";
-
-const READER_THEME = {
-  body: {
-    width: "100% !important",
-    "max-width": "48rem !important",
-    "margin-left": "auto !important",
-    "margin-right": "auto !important",
-    "padding-left": "clamp(1.25rem, 6vw, 4rem) !important",
-    "padding-right": "clamp(1.25rem, 6vw, 4rem) !important",
-  },
-  [CHAPTER_SELECTOR]: {
-    "padding-top": "clamp(3rem, 8vh, 5rem)",
-  },
-  [`${CHAPTER_SELECTOR}::before`]: {
-    display: "block",
-    width: "4rem",
-    height: "1px",
-    margin: "0 auto clamp(2.5rem, 6vh, 4rem)",
-    background: "#d8dde5",
-    content: '""',
-  },
-  [`${CHAPTER_SELECTOR} > h1:first-child`]: {
-    "margin-bottom": "clamp(2rem, 5vh, 3.5rem)",
-  },
-};
 
 document.addEventListener("DOMContentLoaded", () => {
   const elements = {
@@ -47,6 +26,7 @@ document.addEventListener("DOMContentLoaded", () => {
     nextPageButton: document.getElementById("next-page-btn"),
     pageStatus: document.getElementById("reader-page-status"),
     progressStatus: document.getElementById("reader-progress-status"),
+    viewer: document.getElementById("epub-viewer"),
   };
 
   if (Object.values(elements).some((element) => !element)) return;
@@ -59,6 +39,14 @@ document.addEventListener("DOMContentLoaded", () => {
   let fontSize = FONT_SIZE.default;
   let previouslyFocusedElement = null;
   let isNavigating = false;
+
+  const resizeReader = () => {
+    resizeRenditionToContainer(rendition, elements.viewer);
+  };
+
+  const readerResizeObserver =
+    typeof ResizeObserver === "function" ? new ResizeObserver(resizeReader) : null;
+  readerResizeObserver?.observe(elements.viewer);
 
   const updateFontControls = () => {
     elements.fontSizeValue.value = `${fontSize}%`;
@@ -145,13 +133,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     book = window.ePub(epubUrl);
-    rendition = book.renderTo("epub-viewer", {
-      width: "100%",
-      height: "100%",
-      manager: "default",
-      flow: "paginated",
-      spread: "none",
-    });
+    rendition = book.renderTo("epub-viewer", READER_RENDER_OPTIONS);
 
     rendition.themes.default(READER_THEME);
     rendition.themes.fontSize(`${fontSize}%`);
@@ -174,7 +156,12 @@ document.addEventListener("DOMContentLoaded", () => {
     document.body.classList.add("reader-is-open");
     elements.closeButton.focus();
 
-    if (!rendition) void initializeReader();
+    if (!rendition) {
+      void initializeReader();
+      return;
+    }
+
+    requestAnimationFrame(resizeReader);
   };
 
   const closeReader = () => {
