@@ -55,7 +55,3 @@ Create a directory inside `blog/posts/` containing a `metadata.json` file and it
   "cover": "cover.jpg"
 }
 ```
-
-## Book files
-
-Book pages expect PDF and ePub files in `assets/books/magic-mushrooms-guidebook/`. Keep the existing language suffixes (`en`, `de`, `ru`, and `uk`) when adding the final files.

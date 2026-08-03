@@ -15,7 +15,9 @@
           property="og:description"
           content="Magic Mushrooms Guide — книга від Chilly Hill. Дізнайтеся більше про книгу та завантажте її у форматі PDF або ePub."
   >
-  <meta property="og:url" content="https://chillyhill.ch/books/magic-mushrooms-guidebook/uk/">
+  <meta property="og:url" content="https://chillyhill.ch/books/magic-mushrooms-101/uk/">
+  <meta property="og:image" content="https://chillyhill.ch/assets/books/magic-mushrooms-101-uk/cover.png">
+  <meta property="og:image:alt" content="Обкладинка книги Magic Mushrooms 101">
 
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="Magic Mushrooms Guide — Chilly Hill">
@@ -23,18 +25,20 @@
           name="twitter:description"
           content="Magic Mushrooms Guide — книга від Chilly Hill. Дізнайтеся більше про книгу та завантажте її у форматі PDF або ePub."
   >
+  <meta name="twitter:image" content="https://chillyhill.ch/assets/books/magic-mushrooms-101-uk/cover.png">
+  <meta name="twitter:image:alt" content="Обкладинка книги Magic Mushrooms 101">
 
   <title>Magic Mushrooms Guide — Chilly Hill</title>
 
-  <link rel="canonical" href="https://chillyhill.ch/books/magic-mushrooms-guidebook/uk/">
-  <link rel="alternate" hreflang="en" href="https://chillyhill.ch/books/magic-mushrooms-guidebook/en/">
-  <link rel="alternate" hreflang="de" href="https://chillyhill.ch/books/magic-mushrooms-guidebook/de/">
-  <link rel="alternate" hreflang="ru" href="https://chillyhill.ch/books/magic-mushrooms-guidebook/ru/">
-  <link rel="alternate" hreflang="uk" href="https://chillyhill.ch/books/magic-mushrooms-guidebook/uk/">
+  <link rel="canonical" href="https://chillyhill.ch/books/magic-mushrooms-101/uk/">
+  <link rel="alternate" hreflang="en" href="https://chillyhill.ch/books/magic-mushrooms-101/en/">
+  <link rel="alternate" hreflang="de" href="https://chillyhill.ch/books/magic-mushrooms-101/de/">
+  <link rel="alternate" hreflang="ru" href="https://chillyhill.ch/books/magic-mushrooms-101/ru/">
+  <link rel="alternate" hreflang="uk" href="https://chillyhill.ch/books/magic-mushrooms-101/uk/">
   <link
           rel="alternate"
           hreflang="x-default"
-          href="https://chillyhill.ch/books/magic-mushrooms-guidebook/en/"
+          href="https://chillyhill.ch/books/magic-mushrooms-101/en/"
   >
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -48,8 +52,8 @@
   <link rel="stylesheet" href="../../../css/book.css">
 
   <!-- ePub.js & JSZip via CDN -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.5/jszip.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/epubjs/dist/epub.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/epubjs@0.3.93/dist/epub.min.js"></script>
 
   <script type="module" src="../../../js/main.js"></script>
   <script type="module" src="../../../js/book.js"></script>
@@ -100,7 +104,7 @@
       <div class="download-actions" aria-label="Завантажити або читати книгу">
         <a
                 class="button button-primary"
-                href="../../../assets/books/magic-mushrooms-guidebook/magic-mushrooms-guidebook-uk.pdf"
+                href="../../../assets/books/magic-mushrooms-101-uk/magic-mushrooms-101-uk.pdf"
                 download
         >
           <span>Завантажити PDF</span>
@@ -108,7 +112,7 @@
         <a
                 id="epub-download-link"
                 class="button button-secondary"
-                href="../../../assets/books/magic-mushrooms-guidebook/magic-mushrooms-guidebook-uk.epub"
+                href="../../../assets/books/magic-mushrooms-101-uk/magic-mushrooms-101-uk.epub"
                 download
         >
           <span>Завантажити ePub</span>
@@ -123,8 +127,15 @@
       </div>
     </div>
 
-    <figure class="book-cover-placeholder" aria-label="Місце для обкладинки книги">
-      <div class="book-cover-inner"></div>
+    <figure class="book-cover">
+      <img
+              class="book-cover-image"
+              src="../../../assets/books/magic-mushrooms-101-uk/cover.png"
+              alt="Обкладинка книги Magic Mushrooms 101"
+              width="1410"
+              height="2250"
+              decoding="async"
+      >
     </figure>
   </article>
 
@@ -145,16 +156,36 @@
   </section>
 </main>
 
-<!-- Modal Reader Window -->
-<div id="reader-modal" class="reader-modal" aria-hidden="true" role="dialog" aria-label="Онлайн-рідер">
-  <button type="button" id="close-reader-btn" class="reader-close-btn" aria-label="Закрити рідер">&times;</button>
-
-  <div class="reader-controls">
-    <button type="button" id="prev-page" class="reader-nav-btn" aria-label="Попередній сторінка">&#10094;</button>
-    <button type="button" id="next-page" class="reader-nav-btn" aria-label="Наступна сторінка">&#10095;</button>
-  </div>
-
+<div
+        id="reader-modal"
+        class="reader-modal"
+        aria-hidden="true"
+        aria-label="Онлайн-читалка"
+        aria-modal="true"
+        role="dialog"
+>
+  <header class="reader-toolbar">
+    <div class="reader-font-controls" aria-label="Розмір тексту">
+      <button type="button" id="decrease-font-btn" class="reader-tool-button" aria-label="Зменшити текст">A−</button>
+      <output id="font-size-value" class="reader-font-value" aria-live="polite">100%</output>
+      <button type="button" id="increase-font-btn" class="reader-tool-button" aria-label="Збільшити текст">A+</button>
+    </div>
+    <button
+            type="button"
+            id="close-reader-btn"
+            class="reader-tool-button reader-close-btn"
+            aria-label="Закрити читалку"
+    >&times;</button>
+  </header>
   <div id="epub-viewer" class="epub-viewer"></div>
+  <footer class="reader-status" aria-live="polite">
+    <output
+            id="reader-page-status"
+            data-page-template="Сторінка {current} з {total}"
+            data-error-label="Не вдалося відкрити книгу"
+    >Готуємо сторінки…</output>
+    <output id="reader-progress-status" class="reader-progress-status">0%</output>
+  </footer>
 </div>
 
 <footer class="site-footer book-footer">

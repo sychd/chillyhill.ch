@@ -1,58 +1,166 @@
+const FONT_SIZE = {
+  default: 100,
+  min: 80,
+  max: 160,
+  step: 10,
+};
+
+const LOCATION_BREAK_LENGTH = 1600;
+
 document.addEventListener("DOMContentLoaded", () => {
-  const openBtn = document.getElementById("open-reader-btn");
-  const closeBtn = document.getElementById("close-reader-btn");
-  const modal = document.getElementById("reader-modal");
-  const epubLink = document.getElementById("epub-download-link");
-  const prevBtn = document.getElementById("prev-page");
-  const nextBtn = document.getElementById("next-page");
-
-  let rendition = null;
-  let book = null;
-
-  if (!openBtn || !closeBtn || !modal || !epubLink || !prevBtn || !nextBtn) return;
-
-  const epubUrl = epubLink.getAttribute("href");
-
-  // Open Modal & Load Book
-  openBtn.addEventListener("click", () => {
-    modal.classList.add("is-open");
-    modal.setAttribute("aria-hidden", "false");
-    document.body.style.overflow = "hidden"; // Блокируем скролл основной страницы
-
-    if (!rendition) {
-      // Инициализация ePub.js
-      book = ePub(epubUrl);
-      rendition = book.renderTo("epub-viewer", {
-        width: "100%",
-        height: "100%",
-        spread: "always",
-      });
-
-      rendition.display();
-
-      // Управление стрелками с клавиатуры
-      document.addEventListener("keydown", handleKeyPress);
-    }
-  });
-
-  // Close Modal
-  const closeModal = () => {
-    modal.classList.remove("is-open");
-    modal.setAttribute("aria-hidden", "true");
-    document.body.style.overflow = "";
+  const elements = {
+    openButton: document.getElementById("open-reader-btn"),
+    closeButton: document.getElementById("close-reader-btn"),
+    modal: document.getElementById("reader-modal"),
+    epubLink: document.getElementById("epub-download-link"),
+    decreaseFontButton: document.getElementById("decrease-font-btn"),
+    increaseFontButton: document.getElementById("increase-font-btn"),
+    fontSizeValue: document.getElementById("font-size-value"),
+    pageStatus: document.getElementById("reader-page-status"),
+    progressStatus: document.getElementById("reader-progress-status"),
   };
 
-  closeBtn.addEventListener("click", closeModal);
+  if (Object.values(elements).some((element) => !element)) return;
 
-  // Pagination Controls
-  prevBtn.addEventListener("click", () => rendition?.prev());
-  nextBtn.addEventListener("click", () => rendition?.next());
+  const epubUrl = elements.epubLink.getAttribute("href");
+  let book = null;
+  let rendition = null;
+  let latestLocation = null;
+  let locationsReady = false;
+  let fontSize = FONT_SIZE.default;
+  let previouslyFocusedElement = null;
 
-  function handleKeyPress(e) {
-    if (!modal.classList.contains("is-open")) return;
+  const updateFontControls = () => {
+    elements.fontSizeValue.value = `${fontSize}%`;
+    elements.fontSizeValue.textContent = `${fontSize}%`;
+    elements.decreaseFontButton.disabled = fontSize === FONT_SIZE.min;
+    elements.increaseFontButton.disabled = fontSize === FONT_SIZE.max;
+  };
 
-    if (e.key === "ArrowRight") rendition?.next();
-    if (e.key === "ArrowLeft") rendition?.prev();
-    if (e.key === "Escape") closeModal();
+  const setFontSize = (nextFontSize) => {
+    fontSize = Math.min(FONT_SIZE.max, Math.max(FONT_SIZE.min, nextFontSize));
+    rendition?.themes.fontSize(`${fontSize}%`);
+    updateFontControls();
+  };
+
+  const formatPageStatus = (currentPage, totalPages) => {
+    return elements.pageStatus.dataset.pageTemplate
+      .replace("{current}", currentPage.toLocaleString())
+      .replace("{total}", totalPages.toLocaleString());
+  };
+
+  const updateReadingPosition = (location = latestLocation) => {
+    latestLocation = location;
+
+    if (!locationsReady || !book || !location?.start?.cfi) return;
+
+    const totalPages = book.locations.length();
+    const currentCfi = location.atEnd ? location.end.cfi : location.start.cfi;
+    const locationIndex = book.locations.locationFromCfi(currentCfi);
+
+    if (totalPages === 0 || locationIndex < 0) return;
+
+    const currentPage = location.atEnd ? totalPages : Math.min(locationIndex + 1, totalPages);
+    const percentage = location.atEnd ? 1 : book.locations.percentageFromCfi(currentCfi);
+
+    elements.pageStatus.textContent = formatPageStatus(currentPage, totalPages);
+    elements.progressStatus.textContent = `${Math.round((percentage ?? 0) * 100)}%`;
+  };
+
+  const prepareLocations = async () => {
+    const storageKey = `${book.key()}-locations`;
+    let locationsLoaded = false;
+
+    try {
+      const storedLocations = localStorage.getItem(storageKey);
+
+      if (storedLocations) {
+        book.locations.load(storedLocations);
+        locationsLoaded = book.locations.length() > 0;
+      }
+    } catch {
+      // Storage can be unavailable in private browsing; generation still works in memory.
+    }
+
+    if (!locationsLoaded) {
+      await book.locations.generate(LOCATION_BREAK_LENGTH);
+
+      try {
+        localStorage.setItem(storageKey, book.locations.save());
+      } catch {
+        // Reading does not depend on caching generated locations.
+      }
+    }
+
+    locationsReady = true;
+    updateReadingPosition(rendition.currentLocation());
+  };
+
+  const showReaderError = () => {
+    elements.pageStatus.textContent = elements.pageStatus.dataset.errorLabel;
+    elements.progressStatus.textContent = "";
+  };
+
+  const initializeReader = async () => {
+    if (typeof window.ePub !== "function" || !epubUrl) {
+      showReaderError();
+      return;
+    }
+
+    book = window.ePub(epubUrl);
+    rendition = book.renderTo("epub-viewer", {
+      width: "100%",
+      height: "100%",
+      manager: "continuous",
+      flow: "scrolled",
+      spread: "none",
+    });
+
+    rendition.themes.fontSize(`${fontSize}%`);
+    rendition.on("relocated", updateReadingPosition);
+    rendition.on("keyup", handleKeyPress);
+
+    try {
+      await rendition.display();
+      await book.ready;
+      await prepareLocations();
+    } catch {
+      showReaderError();
+    }
+  };
+
+  const openReader = () => {
+    previouslyFocusedElement = document.activeElement;
+    elements.modal.classList.add("is-open");
+    elements.modal.setAttribute("aria-hidden", "false");
+    document.body.classList.add("reader-is-open");
+    elements.closeButton.focus();
+
+    if (!rendition) void initializeReader();
+  };
+
+  const closeReader = () => {
+    elements.modal.classList.remove("is-open");
+    elements.modal.setAttribute("aria-hidden", "true");
+    document.body.classList.remove("reader-is-open");
+    previouslyFocusedElement?.focus();
+  };
+
+  function handleKeyPress(event) {
+    if (event.key === "Escape" && elements.modal.classList.contains("is-open")) {
+      closeReader();
+    }
   }
+
+  updateFontControls();
+
+  elements.openButton.addEventListener("click", openReader);
+  elements.closeButton.addEventListener("click", closeReader);
+  elements.decreaseFontButton.addEventListener("click", () => {
+    setFontSize(fontSize - FONT_SIZE.step);
+  });
+  elements.increaseFontButton.addEventListener("click", () => {
+    setFontSize(fontSize + FONT_SIZE.step);
+  });
+  document.addEventListener("keydown", handleKeyPress);
 });
