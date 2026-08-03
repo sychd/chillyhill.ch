@@ -1,16 +1,30 @@
 :root {
   --color-bg: #f7fbff;
+  --color-surface: #fff;
   --color-primary: #6d38d5;
+  --color-primary-hover: #4c1d95;
   --color-text: #21183f;
   --color-text-muted: #6d6877;
   --color-focus: #7c3aed;
+  --color-border-primary: color-mix(in srgb, var(--color-primary), transparent 58%);
 
   --space-sm: 0.75rem;
   --space-md: 1rem;
   --space-lg: 1.5rem;
   --space-xl: 2.5rem;
 
+  --radius-sm: 0.25rem;
+
   --container-width: 68rem;
+  --content-width: 40rem;
+  --page-gutter: clamp(2rem, 7vw, 5rem);
+  --header-padding: clamp(1.25rem, 4vw, 2.25rem);
+  --interactive-size: 2.75rem;
+
+  --layer-content: 1;
+  --layer-header: 2;
+  --layer-modal: 10;
+  --layer-modal-controls: 11;
 
   --transition-fast: 150ms ease;
 
@@ -33,9 +47,9 @@ html {
 
 body {
   position: relative;
-  min-height: 100vh;
+  min-height: 100dvh;
   margin: 0;
-  overflow-x: hidden;
+  overflow-x: clip;
   color: var(--color-text);
   font-family:
     "Roboto", ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
@@ -57,6 +71,10 @@ a {
   color: inherit;
 }
 
+button {
+  font: inherit;
+}
+
 a:focus-visible,
 button:focus-visible {
   outline: 3px solid var(--color-focus);
@@ -64,7 +82,7 @@ button:focus-visible {
 }
 
 .max-w-container {
-  width: min(100% - clamp(2rem, 7vw, 5rem), var(--container-width));
+  width: min(100% - var(--page-gutter), var(--container-width));
   margin-inline: auto;
 }
 
@@ -86,23 +104,19 @@ button:focus-visible {
   overflow: visible;
 }
 
-.site-footer {
+.site-header {
   position: relative;
-  z-index: 1;
-}
-
-.book-header {
-  position: relative;
-  z-index: 2;
+  z-index: var(--layer-header);
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: var(--space-lg);
-  padding-block: clamp(1.25rem, 4vw, 2.25rem);
+  padding-block: var(--header-padding);
 }
 
 .home-link {
   display: inline-flex;
+  min-height: var(--interactive-size);
   align-items: center;
   gap: 0.65rem;
   color: var(--color-text);
@@ -132,6 +146,9 @@ button:focus-visible {
 }
 
 .site-nav a {
+  display: inline-flex;
+  min-height: var(--interactive-size);
+  align-items: center;
   color: var(--color-text-muted);
   font-size: 0.82rem;
   font-weight: 700;
@@ -148,8 +165,8 @@ button:focus-visible {
 
 .privacy-note {
   position: relative;
-  z-index: 1;
-  width: min(100% - clamp(2rem, 7vw, 5rem), 40rem);
+  z-index: var(--layer-content);
+  width: min(100% - var(--page-gutter), var(--content-width));
   margin: var(--space-lg) auto 0;
   color: var(--color-text-muted);
   font-size: var(--text-body-size);
@@ -158,9 +175,9 @@ button:focus-visible {
 
 .site-main {
   position: relative;
-  z-index: 1;
+  z-index: var(--layer-content);
   display: grid;
-  min-height: calc(100vh - 5rem);
+  min-height: calc(100dvh - 5rem);
   place-items: center;
   padding-block: clamp(0.5rem, 2vw, 1.5rem);
 }
@@ -173,7 +190,7 @@ button:focus-visible {
 
 .portrait-shell {
   position: relative;
-  width: 150px;
+  width: 9.375rem;
   aspect-ratio: 1;
   border-radius: 30%;
   transform: rotate(40deg);
@@ -226,11 +243,11 @@ button:focus-visible {
 .contact-section a {
   display: inline-flex;
   max-width: 100%;
-  min-height: 2rem;
+  min-height: var(--interactive-size);
   align-items: center;
   justify-content: center;
   gap: 0.45rem;
-  border-bottom: 1px solid color-mix(in srgb, var(--color-primary), transparent 58%);
+  border-bottom: 1px solid var(--color-border-primary);
   color: var(--color-primary);
   font-size: 0.95rem;
   font-weight: 700;
@@ -260,40 +277,14 @@ button:focus-visible {
 
 .contact-section a:hover {
   border-color: currentColor;
-  color: #4c1d95;
+  color: var(--color-primary-hover);
   transform: translateY(-0.125rem);
 }
 
-.support-actions a {
-  min-height: 2.4rem;
-  padding: 0.4rem 0.8rem;
-  border: 1px solid color-mix(in srgb, var(--color-primary), transparent 62%);
-  border-radius: 8px;
-  background: color-mix(in srgb, var(--color-primary), transparent 94%);
-}
-
-.support-actions a:hover {
-  background: color-mix(in srgb, var(--color-primary), transparent 90%);
-}
-
-.follow-up-section {
-  display: grid;
-  width: min(100%, 40rem);
-  gap: var(--space-md);
-  margin-top: var(--space-lg);
-  padding-top: var(--space-lg);
-  border-top: 1px solid color-mix(in srgb, var(--color-text-muted), transparent 78%);
-}
-
-.follow-up-text {
-  margin: 0;
-  color: var(--color-text-muted);
-  font-size: var(--text-body-size);
-  text-align: justify;
-}
-
 .info-text {
-  max-width: 40rem;
+  display: grid;
+  max-width: var(--content-width);
+  gap: var(--space-md);
   margin-top: var(--space-lg);
   color: var(--color-text-muted);
   text-align: justify;
@@ -304,15 +295,9 @@ button:focus-visible {
   font-size: var(--text-body-size);
 }
 
-.about-page .site-main {
+:is(.about-page, .blog-page) .site-main {
   align-items: start;
-  min-height: calc(100vh - 11rem);
-  padding-block: clamp(1rem, 4vw, 3rem) clamp(2rem, 7vw, 5rem);
-}
-
-.blog-page .site-main {
-  align-items: start;
-  min-height: calc(100vh - 11rem);
+  min-height: calc(100dvh - 11rem);
   padding-block: clamp(1rem, 4vw, 3rem) clamp(2rem, 7vw, 5rem);
 }
 
@@ -332,8 +317,7 @@ button:focus-visible {
   line-height: 0.95;
 }
 
-.about-copy,
-.blog-copy {
+.about-copy {
   display: grid;
   gap: var(--space-md);
   color: var(--color-text-muted);
@@ -341,15 +325,14 @@ button:focus-visible {
   text-align: justify;
 }
 
-.about-copy p,
-.blog-copy p {
+.about-copy p {
   margin: 0;
 }
 
 .text-link {
   display: inline-flex;
   align-items: center;
-  border-bottom: 1px solid color-mix(in srgb, var(--color-primary), transparent 58%);
+  border-bottom: 1px solid var(--color-border-primary);
   color: var(--color-primary);
   font-weight: 700;
   text-decoration: none;
@@ -360,10 +343,12 @@ button:focus-visible {
 
 .text-link:hover {
   border-color: currentColor;
-  color: #4c1d95;
+  color: var(--color-primary-hover);
 }
 
 .site-footer {
+  position: relative;
+  z-index: var(--layer-content);
   padding: var(--space-lg);
   color: var(--color-text-muted);
   text-align: center;
@@ -392,12 +377,17 @@ button:focus-visible {
     display: contents;
   }
 
-  .book-header {
+  .site-header {
     align-items: flex-start;
   }
 
   .site-nav {
     gap: 0.75rem;
+  }
+
+  .info-text,
+  .about-copy {
+    text-align: start;
   }
 }
 

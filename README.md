@@ -1,41 +1,54 @@
-# Chilly Hill Landing Page
+# Chilly Hill
 
-Lightweight personal landing page built with HTML5, CSS3, and modern vanilla JavaScript. It has no framework or runtime dependencies.
+A lightweight static website built with semantic HTML, CSS, and modern vanilla JavaScript.
 
-## Project Structure
+## Structure
 
 ```text
 .
-├── index.html
-├── css/main.css
-├── js/main.js
-├── assets/images/
-├── assets/svg/
-├── favicon.ico
-├── robots.txt
-└── README.md
+├── about/                       # About page
+├── assets/                      # Images, icons, and book files
+├── blog/
+│   ├── posts/                   # One directory per post
+│   └── index.html
+├── books/                       # Localized book landing pages
+├── css/                         # Shared and page-specific styles
+├── js/                          # Shared and page-specific scripts
+└── index.html                   # Home page
 ```
 
-## Add Images
+Shared design tokens live in `:root` in `css/main.css`. Page-specific styles should reuse those variables instead of duplicating colors, spacing, and transitions.
 
-Place new image files in `assets/images/`, then add their paths to the `imageSources` array in `js/main.js`.
+## Development
 
-The image rotator uses a shuffled deck: each image appears once before the list is shuffled again, and the current image is excluded when a new deck starts.
+```sh
+npm install
+npm run dev
+```
 
-Replace `assets/images/og-image.png` when you want a custom preview image for messengers and social networks.
+The local site is available at `http://127.0.0.1:8080`.
 
-## Edit Text
+Before publishing, run:
 
-Edit the title, greeting, intro paragraph, and footer directly in `index.html`.
+```sh
+npm run lint
+```
 
-## Add Contact Links
+Use `npm run format` to apply the configured Biome formatting rules.
 
-Update the anchors inside the `contact-section` in `index.html`. External links should keep `target="_blank"` and `rel="noopener noreferrer"`.
+## Blog posts
 
-## Change Theme Colors
+Create a directory inside `blog/posts/` containing a `metadata.json` file and its cover image. The blog discovers posts from the directory listing at runtime, so the hosting environment must expose directory indexes for `blog/posts/`.
 
-All main theme values are CSS custom properties at the top of `css/main.css`. Change colors, spacing, radii, layout width, and transition speeds there.
+```json
+{
+  "name": "Post title",
+  "description": "Short card description",
+  "link": "https://example.com/post",
+  "cover": "cover.jpg"
+}
+```
 
-## Run Locally
+## Book files
 
-Open `index.html` in a browser, or serve the folder with any static file server.
+Book pages expect PDF and ePub files in `assets/books/magic-mushrooms-guidebook/`. Keep the existing language suffixes (`en`, `de`, `ru`, and `uk`) when adding the final files.

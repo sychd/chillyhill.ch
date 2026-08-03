@@ -1,8 +1,9 @@
 {
   "name": "chillyhill.ch",
   "version": "1.0.0",
-  "description": "Welcome card",
-  "homepage": "https://github.com/sychd/chillyhill.ch#readme",
+  "private": true,
+  "description": "Static website for Chilly Hill",
+  "homepage": "https://chillyhill.ch/",
   "bugs": {
     "url": "https://github.com/sychd/chillyhill.ch/issues"
   },
@@ -13,7 +14,6 @@
   "license": "ISC",
   "author": "dsych",
   "type": "module",
-  "main": "js/index.js",
   "scripts": {
     "dev": "http-server . -a 127.0.0.1 -p 8080 -c-1",
     "format": "biome format --write .",

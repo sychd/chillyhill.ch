@@ -1,6 +1,6 @@
 .book-page {
   display: flex;
-  min-height: 100vh;
+  min-height: 100dvh;
   flex-direction: column;
 }
 
@@ -12,15 +12,16 @@
 
 .book-language-row {
   position: relative;
-  z-index: 2;
+  z-index: var(--layer-header);
   display: flex;
   justify-content: flex-end;
-  margin-top: calc(clamp(1.25rem, 4vw, 2.25rem) * -0.65);
+  margin-top: calc(var(--header-padding) * -0.65);
   margin-bottom: clamp(1rem, 3vw, 2rem);
 }
 
 .language-switcher a {
   display: inline-flex;
+  min-height: var(--interactive-size);
   align-items: center;
   gap: 0.45rem;
   padding-block: 0.3rem;
@@ -52,7 +53,7 @@
 
 .book-main {
   position: relative;
-  z-index: 1;
+  z-index: var(--layer-content);
   display: grid;
   flex: 1;
   gap: clamp(4rem, 9vw, 7rem);
@@ -68,15 +69,6 @@
 
 .book-copy {
   max-width: 38rem;
-}
-
-.book-eyebrow {
-  margin: 0 0 0.9rem;
-  color: var(--color-primary);
-  font-size: clamp(0.75rem, 1vw, 0.85rem);
-  font-weight: 900;
-  letter-spacing: 0.13em;
-  text-transform: uppercase;
 }
 
 .book-copy h1 {
@@ -115,7 +107,8 @@
   justify-content: center;
   padding: 0.7rem 1.15rem;
   border: 1px solid var(--color-primary);
-  border-radius: 0.25rem;
+  border-radius: var(--radius-sm);
+  font-family: inherit;
   font-size: 0.9rem;
   font-weight: 700;
   text-decoration: none;
@@ -125,12 +118,12 @@
 }
 
 .button:hover {
-  color: #fff;
+  color: var(--color-surface);
   background: color-mix(in srgb, var(--color-primary), black 16%);
 }
 
 .button-primary {
-  color: #fff;
+  color: var(--color-surface);
   background: var(--color-primary);
 }
 
@@ -144,7 +137,7 @@
 }
 
 .button-secondary:hover {
-  color: #fff;
+  color: var(--color-surface);
   background: var(--color-primary);
 }
 
@@ -157,9 +150,9 @@
 .book-cover-inner {
   aspect-ratio: 4 / 5.35;
   padding: clamp(1.5rem, 4vw, 2.5rem);
-  border: 1px solid color-mix(in srgb, var(--color-primary), transparent 58%);
+  border: 1px solid var(--color-border-primary);
   border-radius: 0.2rem;
-  background: color-mix(in srgb, var(--color-bg), white 38%);
+  background: color-mix(in srgb, var(--color-bg), var(--color-surface) 38%);
 }
 
 .subscribe-section {
@@ -188,7 +181,7 @@
 }
 
 .book-footer {
-  z-index: 1;
+  z-index: var(--layer-content);
   margin-top: 0;
 }
 
@@ -215,7 +208,7 @@
   }
 
   .book-copy h1 {
-    font-size: clamp(3.6rem, 22vw, 5.4rem);
+    font-size: clamp(3rem, 18vw, 4.5rem);
   }
 
   .download-actions {
@@ -235,16 +228,15 @@
   }
 }
 
-/* Reader Modal Styles */
 .reader-modal {
-  display: none;
   position: fixed;
   inset: 0;
-  z-index: 9999;
-  background-color: #ffffff;
+  z-index: var(--layer-modal);
+  display: none;
   width: 100vw;
-  height: 100vh;
+  height: 100dvh;
   overflow: hidden;
+  background-color: var(--color-surface);
 }
 
 .reader-modal.is-open {
@@ -253,54 +245,54 @@
   align-items: center;
 }
 
-/* Close button (top right) */
 .reader-close-btn {
   position: absolute;
   top: 1rem;
   right: 1.5rem;
-  z-index: 10001;
+  z-index: var(--layer-modal-controls);
+  display: grid;
+  width: 3rem;
+  height: 3rem;
+  place-items: center;
   background: transparent;
   border: none;
   font-size: 2.5rem;
   line-height: 1;
   cursor: pointer;
-  color: #1a1a1a;
-  transition: opacity 0.2s ease;
+  color: var(--color-text);
+  transition: opacity var(--transition-fast);
 }
 
 .reader-close-btn:hover {
   opacity: 0.7;
 }
 
-/* Container for ePub rendering */
 .epub-viewer {
   width: 100%;
-  max-width: 900px;
-  height: 85vh;
+  max-width: 56.25rem;
+  height: 85dvh;
   margin: 0 auto;
 }
 
-/* Navigation Controls (Left / Right buttons) */
 .reader-controls {
   position: absolute;
   top: 50%;
-  left: 0;
-  right: 0;
+  inset-inline: 0;
   transform: translateY(-50%);
   display: flex;
   justify-content: space-between;
   padding: 0 1rem;
   pointer-events: none;
-  z-index: 10000;
+  z-index: var(--layer-modal-controls);
 }
 
 .reader-nav-btn {
   pointer-events: auto;
-  background: rgba(247, 251, 255, 0.8);
-  border: 1px solid rgba(0, 0, 0, 0.1);
+  background: color-mix(in srgb, var(--color-bg), transparent 20%);
+  border: 1px solid color-mix(in srgb, var(--color-text), transparent 90%);
   border-radius: 50%;
-  width: 48px;
-  height: 48px;
+  width: 3rem;
+  height: 3rem;
   font-size: 1.25rem;
   cursor: pointer;
   display: flex;
@@ -313,6 +305,6 @@
 }
 
 .reader-nav-btn:hover {
-  background: #ffffff;
+  background: var(--color-surface);
   transform: scale(1.05);
 }
