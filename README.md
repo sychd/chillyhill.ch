@@ -52,6 +52,10 @@ Create a directory inside `blog/posts/` containing a `metadata.json` file and it
   "name": "Post title",
   "description": "Short card description",
   "link": "https://example.com/post",
-  "cover": "cover.jpg"
+  "cover": "cover.jpg",
+  "isDescriptionVisible": false
 }
 ```
+
+Set `isDescriptionVisible` to `true` to show the title and description below the cover. When it is
+`false` or omitted, the card displays only the cover image.

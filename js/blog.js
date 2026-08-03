@@ -36,6 +36,10 @@ function createPostCard(post) {
     card.rel = "noopener noreferrer";
   }
 
+  if (!post.isDescriptionVisible) {
+    card.setAttribute("aria-label", post.title);
+  }
+
   if (post.cover) {
     const image = document.createElement("img");
     image.className = "post-card-image";
@@ -46,22 +50,25 @@ function createPostCard(post) {
     card.append(image);
   }
 
-  const body = document.createElement("div");
-  body.className = "post-card-body";
+  if (post.isDescriptionVisible) {
+    const body = document.createElement("div");
+    body.className = "post-card-body";
 
-  const title = document.createElement("h2");
-  title.className = "post-card-title";
-  title.textContent = post.title;
-  body.append(title);
+    const title = document.createElement("h2");
+    title.className = "post-card-title";
+    title.textContent = post.title;
+    body.append(title);
 
-  if (post.description) {
-    const description = document.createElement("p");
-    description.className = "post-card-description";
-    description.textContent = post.description;
-    body.append(description);
+    if (post.description) {
+      const description = document.createElement("p");
+      description.className = "post-card-description";
+      description.textContent = post.description;
+      body.append(description);
+    }
+
+    card.append(body);
   }
 
-  card.append(body);
   return card;
 }
 

@@ -192,21 +192,17 @@ button:focus-visible {
   position: relative;
   width: 9.375rem;
   aspect-ratio: 1;
-  border-radius: 30%;
-  transform: rotate(40deg);
+  border-radius: 50%;
   background: transparent;
   box-shadow: none;
   overflow: hidden;
-  filter: drop-shadow(0 0.45rem 1rem rgba(255, 255, 255, 0.58));
 }
 
 .portrait-image {
-  transform: rotate(-43deg);
   width: 100%;
   height: 100%;
   object-fit: cover;
   object-position: center;
-  border-radius: 44%;
 }
 
 .intro {

@@ -42,9 +42,17 @@ const posts = await Promise.all(
       throw new Error(`${metadataPath} must define name and link.`);
     }
 
+    if (
+      metadata.isDescriptionVisible !== undefined &&
+      typeof metadata.isDescriptionVisible !== "boolean"
+    ) {
+      throw new Error(`${metadataPath} must define isDescriptionVisible as a boolean.`);
+    }
+
     return {
       title: metadata.name,
       description: metadata.description || "",
+      isDescriptionVisible: metadata.isDescriptionVisible === true,
       link: metadata.link,
       cover: metadata.cover ? path.posix.join("posts", directory.name, metadata.cover) : "",
     };

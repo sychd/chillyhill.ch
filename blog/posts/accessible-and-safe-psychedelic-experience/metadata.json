@@ -2,5 +2,6 @@
   "name": "Accessible and Safe Psychedelic Experience",
   "description": "As I see it, and as I’d like it to be for you",
   "link": "https://chillyhill.substack.com/p/accessible-and-safe-psychedelic-experience",
-  "cover": "cover.jpg"
+  "cover": "cover.jpg",
+  "isDescriptionVisible": false
 }
