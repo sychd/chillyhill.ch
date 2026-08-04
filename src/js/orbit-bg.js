@@ -37,9 +37,7 @@ export function selectOrbitBackgroundProfile({
   isCompactViewport = false,
   isCoarsePointer = false,
 } = {}) {
-  return isCompactViewport || isCoarsePointer
-    ? renderProfiles.mobile
-    : renderProfiles.desktop;
+  return isCompactViewport || isCoarsePointer ? renderProfiles.mobile : renderProfiles.desktop;
 }
 
 function initializeOrbitBackground(svgElement) {
@@ -54,9 +52,7 @@ function initializeOrbitBackground(svgElement) {
   function render(timestamp = 0) {
     const elapsedTime = timestamp / 1000;
     const delta =
-      previousTimestamp === 0
-        ? 0
-        : Math.min((timestamp - previousTimestamp) / 1000, 0.12);
+      previousTimestamp === 0 ? 0 : Math.min((timestamp - previousTimestamp) / 1000, 0.12);
     const breath = breathingCurve(elapsedTime);
 
     animationFrame = 0;
@@ -64,21 +60,12 @@ function initializeOrbitBackground(svgElement) {
     lastRenderedTimestamp = timestamp;
     phaseTime += delta * breath.speed;
 
-    updateProjectedNodes(
-      scene.projectedNodes,
-      scene.nodes,
-      profile,
-      phaseTime,
-      breath.amount,
-    );
+    updateProjectedNodes(scene.projectedNodes, scene.nodes, profile, phaseTime, breath.amount);
     updateGradient(scene.gradientStops, phaseTime);
     updateLinks(scene.linkPaths, scene.links, scene.projectedNodes, profile);
     updateContours(scene.contourPaths, scene.projectedNodes, profile);
     updateNodes(scene.nodeCircles, scene.projectedNodes);
-    scene.meshGroup.setAttribute(
-      "opacity",
-      String(0.82 + breath.amount * 0.12),
-    );
+    scene.meshGroup.setAttribute("opacity", String(0.82 + breath.amount * 0.12));
 
     scheduleRender();
   }
@@ -88,10 +75,7 @@ function initializeOrbitBackground(svgElement) {
       return;
     }
 
-    const delay = Math.max(
-      0,
-      profile.minFrameMs - (performance.now() - lastRenderedTimestamp),
-    );
+    const delay = Math.max(0, profile.minFrameMs - (performance.now() - lastRenderedTimestamp));
 
     clearFrameTimer();
     frameTimer = window.setTimeout(() => {
@@ -150,10 +134,7 @@ function initializeOrbitBackground(svgElement) {
   addMediaQueryListener(reducedMotionQuery, "change", renderStaticFrame);
   addMediaQueryListener(compactViewportQuery, "change", rebuildScene);
   addMediaQueryListener(coarsePointerQuery, "change", rebuildScene);
-  globalThis.document?.addEventListener?.(
-    "visibilitychange",
-    handleVisibilityChange,
-  );
+  globalThis.document?.addEventListener?.("visibilitychange", handleVisibilityChange);
 }
 
 function getCurrentRenderProfile() {
@@ -164,8 +145,10 @@ function getCurrentRenderProfile() {
 }
 
 function buildOrbitScene(svgElement, profile) {
-  const { gradientStops, meshGroup, linkGroup, contourGroup, nodeGroup } =
-    buildScene(svgElement, profile);
+  const { gradientStops, meshGroup, linkGroup, contourGroup, nodeGroup } = buildScene(
+    svgElement,
+    profile,
+  );
   const nodes = createNodes(profile);
   const links = createLinks(nodes, profile);
   const projectedNodes = createProjectedNodes(nodes);
@@ -318,8 +301,7 @@ export function createNodes(profile = renderProfiles.desktop) {
       column,
       seed,
       baseX: profile.marginX + column * spacingX + (seed - 0.5) * 20,
-      baseY:
-        profile.marginY + row * spacingY + (seededNoise(index + 91) - 0.5) * 26,
+      baseY: profile.marginY + row * spacingY + (seededNoise(index + 91) - 0.5) * 26,
     };
   });
 }
@@ -389,13 +371,7 @@ function createContourPaths(group, profile) {
   });
 }
 
-function updateProjectedNodes(
-  projectedNodes,
-  nodes,
-  profile,
-  time,
-  breathAmount,
-) {
+function updateProjectedNodes(projectedNodes, nodes, profile, time, breathAmount) {
   nodes.forEach((node, index) => {
     projectNode(projectedNodes[index], node, profile, time, breathAmount);
   });
@@ -412,15 +388,12 @@ function projectNode(projectedNode, node, profile, time, breathAmount) {
   const swell = Math.sin(time * 0.5 + diagonalPhase * 2.6 + node.seed * 5.8);
   const undertow = Math.cos(time * 0.27 - normalizedY * 4.1 + node.seed * 4.2);
   const height =
-    (swell * 30 + undertow * 15 + Math.sin(time * 0.15 + distance * 7) * 12) *
-    amplitude;
+    (swell * 30 + undertow * 15 + Math.sin(time * 0.15 + distance * 7) * 12) * amplitude;
   const perspective = 1 + height * 0.00155;
   const edgeFade = clamp(1 - distance * 0.34, 0.18, 1);
 
   projectedNode.x =
-    600 +
-    (node.baseX - 600) * perspective +
-    Math.sin(time * 0.23 + node.seed * 8) * 5;
+    600 + (node.baseX - 600) * perspective + Math.sin(time * 0.23 + node.seed * 8) * 5;
   projectedNode.y = 600 + (node.baseY - 600) * perspective + height;
   projectedNode.depth = height;
   projectedNode.opacity = clamp(
@@ -434,18 +407,11 @@ function projectNode(projectedNode, node, profile, time, breathAmount) {
 function updateLinks(paths, links, nodes, profile) {
   paths.forEach((path, index) => {
     const link = links[index];
-    const source =
-      nodes[link.source.row * profile.columns + link.source.column];
-    const target =
-      nodes[link.target.row * profile.columns + link.target.column];
+    const source = nodes[link.source.row * profile.columns + link.source.column];
+    const target = nodes[link.target.row * profile.columns + link.target.column];
     const midpointX = (source.x + target.x) / 2;
-    const midpointY =
-      (source.y + target.y) / 2 - (source.depth + target.depth) * 0.08;
-    const opacity = clamp(
-      (source.opacity + target.opacity) * 0.32 * link.weight,
-      0.04,
-      0.2,
-    );
+    const midpointY = (source.y + target.y) / 2 - (source.depth + target.depth) * 0.08;
+    const opacity = clamp((source.opacity + target.opacity) * 0.32 * link.weight, 0.04, 0.2);
 
     path.setAttribute(
       "d",
@@ -460,10 +426,7 @@ function updateLinks(paths, links, nodes, profile) {
 
 function updateContours(paths, nodes, profile) {
   paths.forEach((path, row) => {
-    const rowNodes = nodes.slice(
-      row * profile.columns,
-      row * profile.columns + profile.columns,
-    );
+    const rowNodes = nodes.slice(row * profile.columns, row * profile.columns + profile.columns);
     const normalizedRow = row / Math.max(profile.rows - 1, 1);
     const opacity = 0.06 + Math.sin(normalizedRow * Math.PI) * 0.08;
 
@@ -586,10 +549,7 @@ function hexToRgb(hexColor) {
 }
 
 function createMediaQuery(query) {
-  if (
-    typeof window !== "undefined" &&
-    typeof window.matchMedia === "function"
-  ) {
+  if (typeof window !== "undefined" && typeof window.matchMedia === "function") {
     return window.matchMedia(query);
   }
 
