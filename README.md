@@ -22,6 +22,20 @@ A lightweight static website built with semantic HTML, CSS, and modern vanilla J
 
 Shared design tokens live in `:root` in `src/css/main.css`. Page-specific styles should reuse those variables instead of duplicating colors, spacing, and transitions.
 
+## Shared page components
+
+The site header and its navigation are generated at build time by
+`src/components/site-header.js`. A page declares only the active navigation item and the language
+used for accessible labels:
+
+```html
+<!-- @site-header active-page="guidebook" language="en" -->
+```
+
+Supported active pages are `home`, `guidebook`, `blog`, and `about`. Build-time rendering keeps the
+deployed HTML semantic and functional without client-side JavaScript. Use `npm run dev` or
+`npm run build` instead of serving `src` directly.
+
 ## Development
 
 ```sh

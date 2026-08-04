@@ -1,42 +1,96 @@
 import assert from "node:assert/strict";
 import { readFile } from "node:fs/promises";
 import test from "node:test";
+import { renderSiteHeader, renderSiteHeaderMarker } from "../src/components/site-header.js";
 
 const pages = [
-  { path: "src/index.html", url: "https://chillyhill.ch/", isHome: true },
-  { path: "src/about/index.html", url: "https://chillyhill.ch/about/" },
-  { path: "src/blog/index.html", url: "https://chillyhill.ch/blog/" },
   {
-    path: "src/books/magic-mushrooms-101/index.html",
-    url: "https://chillyhill.ch/books/magic-mushrooms-101/",
+    path: "src/index.html",
+    activePage: "home",
+    language: "en",
+    activeLabel: "Home",
+    navigationLabel: "Main navigation",
+  },
+  {
+    path: "src/about/index.html",
+    activePage: "about",
+    language: "en",
+    activeLabel: "About",
+    navigationLabel: "Main navigation",
+  },
+  {
+    path: "src/blog/index.html",
+    activePage: "blog",
+    language: "en",
+    activeLabel: "Blog",
+    navigationLabel: "Main navigation",
   },
   {
     path: "src/books/magic-mushrooms-101/en/index.html",
-    url: "https://chillyhill.ch/books/magic-mushrooms-101/en/",
+    activePage: "guidebook",
+    language: "en",
+    activeLabel: "Guidebook",
+    navigationLabel: "Main navigation",
   },
   {
     path: "src/books/magic-mushrooms-101/de/index.html",
-    url: "https://chillyhill.ch/books/magic-mushrooms-101/de/",
+    activePage: "guidebook",
+    language: "de",
+    activeLabel: "Guidebook",
+    navigationLabel: "Hauptnavigation",
   },
   {
     path: "src/books/magic-mushrooms-101/ru/index.html",
-    url: "https://chillyhill.ch/books/magic-mushrooms-101/ru/",
+    activePage: "guidebook",
+    language: "ru",
+    activeLabel: "Guidebook",
+    navigationLabel: "Основная навигация",
   },
   {
     path: "src/books/magic-mushrooms-101/uk/index.html",
-    url: "https://chillyhill.ch/books/magic-mushrooms-101/uk/",
+    activePage: "guidebook",
+    language: "uk",
+    activeLabel: "Guidebook",
+    navigationLabel: "Основна навігація",
   },
 ];
 
 for (const page of pages) {
-  test(`${page.path} starts its main navigation with the home page`, async () => {
+  test(`${page.path} configures the shared site header`, async () => {
     const html = await readFile(page.path, "utf8");
-    const navigation = html.match(/<nav class="site-nav"[\s\S]*?<\/nav>/)?.[0];
-    const firstLink = navigation?.match(/<a href="([^"]+)"([^>]*)>([^<]+)<\/a>/);
+    const marker = `<!-- @site-header active-page="${page.activePage}" language="${page.language}" -->`;
 
-    assert.ok(firstLink, "main navigation must contain a link");
-    assert.equal(firstLink[3], "Home");
-    assert.equal(new URL(firstLink[1], page.url).pathname, "/");
-    assert.equal(firstLink[2].includes('aria-current="page"'), page.isHome === true);
+    assert.ok(html.includes(marker), "page must declare its shared header context");
+    assert.doesNotMatch(html, /<header class="site-header/);
+  });
+
+  test(`${page.language} ${page.activePage} header renders accessible navigation`, () => {
+    const header = renderSiteHeader({
+      activePage: page.activePage,
+      language: page.language,
+    });
+    const navigation = header.match(/<nav class="site-nav"[\s\S]*?<\/nav>/)?.[0];
+    const links = navigation?.match(/<a [^>]+>[^<]+<\/a>/g) ?? [];
+    const activeLinks = links.filter((link) => link.includes('aria-current="page"'));
+
+    assert.ok(navigation, "header must contain the main navigation");
+    assert.match(navigation, new RegExp(`aria-label="${page.navigationLabel}"`));
+    assert.match(links[0], /<a href="\/"(?: aria-current="page")?>Home<\/a>/);
+    assert.equal(activeLinks.length, 1);
+    assert.ok(activeLinks[0].endsWith(`>${page.activeLabel}</a>`));
   });
 }
+
+test("site header marker is replaced while preserving its indentation", () => {
+  const source = [
+    "<body>",
+    '  <!-- @site-header active-page="home" language="en" -->',
+    "</body>",
+  ].join("\n");
+
+  const rendered = renderSiteHeaderMarker(source, "example.html");
+
+  assert.doesNotMatch(rendered, /@site-header/);
+  assert.match(rendered, /\n {2}<header class="site-header max-w-container">/);
+  assert.match(rendered, /\n {4}<nav class="site-nav"/);
+});

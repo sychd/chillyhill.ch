@@ -1,6 +1,7 @@
 import { cp, mkdir, readdir, readFile, rm, writeFile } from "node:fs/promises";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
+import { renderSiteHeaderMarker } from "../src/components/site-header.js";
 
 const projectRoot = fileURLToPath(new URL("../", import.meta.url));
 const sourceDirectory = path.join(projectRoot, "src");
@@ -18,6 +19,32 @@ const publicEntries = [
   "robots.txt",
 ];
 
+async function renderSharedComponents(directory) {
+  const entries = await readdir(directory, { withFileTypes: true });
+
+  await Promise.all(
+    entries.map(async (entry) => {
+      const entryPath = path.join(directory, entry.name);
+
+      if (entry.isDirectory()) {
+        await renderSharedComponents(entryPath);
+        return;
+      }
+
+      if (path.extname(entry.name) !== ".html") {
+        return;
+      }
+
+      const html = await readFile(entryPath, "utf8");
+      const renderedHtml = renderSiteHeaderMarker(html, path.relative(outputDirectory, entryPath));
+
+      if (renderedHtml !== html) {
+        await writeFile(entryPath, renderedHtml);
+      }
+    }),
+  );
+}
+
 export async function buildSite() {
   await rm(outputDirectory, { force: true, recursive: true });
   await mkdir(outputDirectory, { recursive: true });
@@ -30,6 +57,8 @@ export async function buildSite() {
       });
     }),
   );
+
+  await renderSharedComponents(outputDirectory);
 
   const postDirectories = (await readdir(postsDirectory, { withFileTypes: true }))
     .filter((entry) => entry.isDirectory())
