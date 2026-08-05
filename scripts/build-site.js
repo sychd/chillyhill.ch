@@ -9,16 +9,7 @@ const projectRoot = fileURLToPath(new URL("../", import.meta.url));
 const sourceDirectory = path.join(projectRoot, "src");
 const outputDirectory = path.join(projectRoot, "dist");
 const postsDirectory = path.join(sourceDirectory, "blog", "posts");
-const publicEntries = [
-  "about",
-  "assets",
-  "blog",
-  "books",
-  "css",
-  "js",
-  "index.html",
-  "robots.txt",
-];
+const publicEntries = ["about", "assets", "blog", "books", "css", "js", "index.html", "robots.txt"];
 
 async function renderSharedComponents(directory) {
   const entries = await readdir(directory, { withFileTypes: true });
