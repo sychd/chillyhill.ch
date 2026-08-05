@@ -1,9 +1,9 @@
 const navigationItems = [
   { id: "home", href: "/", label: "Home" },
   {
-    id: "guidebook",
-    href: "/books/magic-mushrooms-101/en/",
-    label: "Guidebook",
+    id: "books",
+    href: "/books/",
+    label: "Books",
   },
   { id: "blog", href: "/blog/", label: "Blog" },
   { id: "about", href: "/about/", label: "About" },

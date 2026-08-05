@@ -160,13 +160,8 @@
   padding: clamp(1.25rem, 3vw, 1.75rem) clamp(1.35rem, 4vw, 2.25rem);
   border: 1px solid color-mix(in srgb, var(--color-primary), transparent 76%);
   border-radius: calc(var(--radius-sm) * 3);
-  background: color-mix(
-    in srgb,
-    var(--color-primary),
-    var(--color-surface) 92%
-  );
-  box-shadow: 0 1rem 3rem
-    color-mix(in srgb, var(--color-primary), transparent 92%);
+  background: color-mix(in srgb, var(--color-primary), var(--color-surface) 92%);
+  box-shadow: 0 1rem 3rem color-mix(in srgb, var(--color-primary), transparent 92%);
   overflow: hidden;
 }
 

@@ -1,0 +1,130 @@
+[
+  {
+    "id": "magic-mushrooms-101",
+    "amazonLink": "https://www.amazon.com/dp/B0HCVF94Z2",
+    "locales": {
+      "en": {
+        "title": "Magic Mushrooms Guide",
+        "description": "Magic Mushrooms Guide — a book from Chilly Hill. Read about the book and download it as PDF or ePub.",
+        "lead": "This book guides you through every stage of the psychedelic journey: from preparation and intention to working with unexpected turns and gentle integration.",
+        "content": "It is written for those who want to approach the experience with full responsibility: to reduce risks, avoid common pitfalls, and bring valuable insights back from the journey.",
+        "downloadPdf": "Download PDF",
+        "downloadEpub": "Download ePub",
+        "readOnline": "Read online",
+        "feedbackCopy": "If this guide helped you, please consider leaving a review on Amazon. Your feedback helps other readers find a responsible resource — and it means a lot to me.",
+        "feedbackLink": "Leave a review",
+        "coverAlt": "Magic Mushrooms 101 book cover",
+        "subscribeNote": "Occasional notes on safer, more thoughtful psychedelic experiences — straight to your inbox.",
+        "langLabel": "Language",
+        "languageNames": {
+          "en": "English",
+          "de": "German",
+          "ru": "Russian",
+          "uk": "Ukrainian"
+        }
+      },
+      "ru": {
+        "title": "Magic Mushrooms Guide",
+        "description": "Magic Mushrooms Guide — книга от Chilly Hill. Узнайте о книге и скачайте её в формате PDF или ePub.",
+        "lead": "Эта книга проведет вас через все этапы психоделического путешествия: от подготовки и намерения до работы с неожиданными поворотами и мягкой интеграции.",
+        "content": "Она написана для тех, кто хочет подойти к опыту со всей ответственностью: снизить риски, избежать распространенных ловушек и принести из путешествия ценные инсайты.",
+        "downloadPdf": "Скачать PDF",
+        "downloadEpub": "Скачать ePub",
+        "readOnline": "Читать онлайн",
+        "feedbackCopy": "Если это руководство помогло вам, пожалуйста, оставьте отзыв на Amazon. Ваша обратная связь помогает другим читателям найти ответственный ресурс — и это очень много значит для меня.",
+        "feedbackLink": "Оставить отзыв",
+        "coverAlt": "Обложка книги Magic Mushrooms 101",
+        "subscribeNote": "Заметки о более безопасном и осознанном психоделическом опыте — время от времени, прямо на вашу почту.",
+        "langLabel": "Язык",
+        "languageNames": {
+          "en": "английскую",
+          "de": "немецкую",
+          "ru": "русскую",
+          "uk": "украинскую"
+        }
+      },
+      "de": {
+        "title": "Magic Mushrooms Guide",
+        "description": "Magic Mushrooms Guide — ein Buch von Chilly Hill. Erfahren Sie mehr über das Buch und laden Sie es als PDF oder ePub herunter.",
+        "lead": "Dieses Buch führt Sie durch jede Phase der psychedelischen Reise: von der Vorbereitung und Intention bis hin zum Umgang mit unerwarteten Wendungen und sanfter Integration.",
+        "content": "Es ist für diejenigen geschrieben, die die Erfahrung mit voller Verantwortung angehen wollen: um Risiken zu reduzieren, häufige Fallstricke zu vermeiden und wertvolle Erkenntnisse von der Reise mitzubringen.",
+        "downloadPdf": "PDF herunterladen",
+        "downloadEpub": "ePub herunterladen",
+        "readOnline": "Online lesen",
+        "feedbackCopy": "Wenn dieser Leitfaden Ihnen geholfen hat, ziehen Sie bitte in Erwägung, eine Bewertung auf Amazon zu hinterlassen. Ihr Feedback hilft anderen Lesern, eine verantwortungsvolle Ressource zu finden — und es bedeutet mir sehr viel.",
+        "feedbackLink": "Eine Bewertung hinterlassen",
+        "coverAlt": "Cover des Buches Magic Mushrooms 101",
+        "subscribeNote": "Gelegentliche Notizen zu sichereren, durchdachteren psychedelischen Erfahrungen — direkt in Ihren Posteingang.",
+        "langLabel": "Sprache",
+        "languageNames": {
+          "en": "Englisch",
+          "de": "Deutsch",
+          "ru": "Russisch",
+          "uk": "Ukrainisch"
+        }
+      },
+      "uk": {
+        "title": "Magic Mushrooms Guide",
+        "description": "Magic Mushrooms Guide — книга від Chilly Hill. Дізнайтеся більше про книгу та завантажте її у форматі PDF або ePub.",
+        "lead": "Ця книга проведе вас через кожен етап психоделічної подорожі: від підготовки та наміру до роботи з неочікуваними поворотами та м’якої інтеграції.",
+        "content": "Вона написана для тих, хто хоче підійти до досвіду з повною відповідальністю: знизити ризики, уникнути поширених пасток і принести цінні інсайти з подорожі.",
+        "downloadPdf": "Завантажити PDF",
+        "downloadEpub": "Завантажити ePub",
+        "readOnline": "Читати онлайн",
+        "feedbackCopy": "Якщо цей посібник допоміг вам, будь ласка, залиште відгук на Amazon. Ваш відгук допомагає іншим читачам знайти відповідальний ресурс — і це дуже багато значить для мене.",
+        "feedbackLink": "Залишити відгук",
+        "coverAlt": "Обкладинка книги Magic Mushrooms 101",
+        "subscribeNote": "Час від часу нотатки про безпечніший та усвідомленіший психоделічний досвід — прямо у вашу скриньку.",
+        "langLabel": "Мова",
+        "languageNames": {
+          "en": "англійську",
+          "de": "німецьку",
+          "ru": "російську",
+          "uk": "українську"
+        }
+      }
+    }
+  },
+  {
+    "id": "a-different-perspective",
+    "amazonLink": "https://www.amazon.com/dp/B0GQ5C3F6R",
+    "locales": {
+      "en": {
+        "title": "A Different Perspective",
+        "description": "A Different Perspective is a collection of stories exploring identity, memory, and human transformation.",
+        "lead": "What if reality is thinner than it seems? What if behind ordinary moments lie forces, choices, and transformations that change who we are?",
+        "content": "Through atmospheric storytelling and philosophical depth, these stories explore identity, memory, grief, love, war, and the quiet transformations that define us. Whether set in a haunted bar, a dystopian future ruled by artificial intelligence, or a medieval kingdom ruled by fear, every narrative asks the same haunting question: Who are we when everything familiar falls away? The supernatural elements serve not as spectacle, but as mirrors—reflecting our fears, our attachments, and our capacity to change.",
+        "downloadPdf": "Download PDF",
+        "downloadEpub": "Download ePub",
+        "readOnline": "Read online",
+        "feedbackCopy": "If you like the book, please consider leaving a review on Amazon. Your feedback matters to me.",
+        "feedbackLink": "Leave a review",
+        "coverAlt": "A Different Perspective book cover",
+        "subscribeNote": "Occasional notes on philosophy and expanding consciousness — straight to your inbox.",
+        "langLabel": "Language",
+        "languageNames": {
+          "en": "English",
+          "ru": "Russian"
+        }
+      },
+      "ru": {
+        "title": "A Different Perspective",
+        "description": "A Different Perspective — сборник историй, исследующий идентичность, память и трансформацию человека.",
+        "lead": "Что, если реальность тоньше, чем кажется? Что, если за обыденными моментами скрываются силы, выборы и трансформации, которые меняют то, кем мы являемся?",
+        "content": "Истории исследуют идентичность, память, горе, любовь, войну и тихие трансформации, которые определяют нас. Будь то бар с привидениями, антиутопическое будущее под властью искусственного интеллекта или средневековое королевство, которым правит страх, — каждый рассказ задаёт один и тот же тревожный вопрос: кто мы, когда всё привычное исчезает? Сверхъестественные элементы служат не зрелищем, а зеркалами, отражающими наши страхи, наши привязанности и нашу способность меняться.",
+        "downloadPdf": "Скачать PDF",
+        "downloadEpub": "Скачать ePub",
+        "readOnline": "Читать онлайн",
+        "feedbackCopy": "Если вам понравилась книга, пожалуйста, оставьте отзыв на Amazon. Ваша поддержка важна!",
+        "feedbackLink": "Оставить отзыв",
+        "coverAlt": "Обложка книги A Different Perspective",
+        "subscribeNote": "Заметки о философии и расширении сознания — время от времени, прямо на вашу почту.",
+        "langLabel": "Язык",
+        "languageNames": {
+          "en": "английскую",
+          "ru": "русскую"
+        }
+      }
+    }
+  }
+]

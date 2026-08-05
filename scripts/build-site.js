@@ -1,6 +1,8 @@
 import { cp, mkdir, readdir, readFile, rm, writeFile } from "node:fs/promises";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
+import { renderBookIndexPage, renderBookPage } from "../src/components/book-page.js";
+import { renderBooksList } from "../src/components/books-list.js";
 import { renderSiteHeaderMarker } from "../src/components/site-header.js";
 
 const projectRoot = fileURLToPath(new URL("../", import.meta.url));
@@ -51,12 +53,41 @@ export async function buildSite() {
 
   await Promise.all(
     publicEntries.map((entry) => {
+      if (entry === "books") {
+        return Promise.resolve();
+      }
+
       return cp(path.join(sourceDirectory, entry), path.join(outputDirectory, entry), {
         recursive: true,
         filter: (source) => path.basename(source) !== ".DS_Store",
       });
     }),
   );
+
+  const booksPath = path.join(sourceDirectory, "books", "books.json");
+  const books = JSON.parse(await readFile(booksPath, "utf8"));
+
+  const booksOutputDir = path.join(outputDirectory, "books");
+  await mkdir(booksOutputDir, { recursive: true });
+
+  const booksListHtml = renderBooksList({ books, language: "en" });
+  await writeFile(path.join(booksOutputDir, "index.html"), booksListHtml);
+
+  for (const book of books) {
+    const bookDir = path.join(booksOutputDir, book.id);
+    await mkdir(bookDir, { recursive: true });
+
+    const indexHtml = renderBookIndexPage({ book });
+    await writeFile(path.join(bookDir, "index.html"), indexHtml);
+
+    for (const language of Object.keys(book.locales)) {
+      const langDir = path.join(bookDir, language);
+      await mkdir(langDir, { recursive: true });
+
+      const bookPageHtml = renderBookPage({ book, language });
+      await writeFile(path.join(langDir, "index.html"), bookPageHtml);
+    }
+  }
 
   await renderSharedComponents(outputDirectory);
 

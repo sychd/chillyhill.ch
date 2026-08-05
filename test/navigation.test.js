@@ -25,35 +25,31 @@ const pages = [
     activeLabel: "Blog",
     navigationLabel: "Main navigation",
   },
-  {
-    path: "src/books/magic-mushrooms-101/en/index.html",
-    activePage: "guidebook",
-    language: "en",
-    activeLabel: "Guidebook",
-    navigationLabel: "Main navigation",
-  },
-  {
-    path: "src/books/magic-mushrooms-101/de/index.html",
-    activePage: "guidebook",
-    language: "de",
-    activeLabel: "Guidebook",
-    navigationLabel: "Hauptnavigation",
-  },
-  {
-    path: "src/books/magic-mushrooms-101/ru/index.html",
-    activePage: "guidebook",
-    language: "ru",
-    activeLabel: "Guidebook",
-    navigationLabel: "Основная навигация",
-  },
-  {
-    path: "src/books/magic-mushrooms-101/uk/index.html",
-    activePage: "guidebook",
-    language: "uk",
-    activeLabel: "Guidebook",
-    navigationLabel: "Основна навігація",
-  },
 ];
+
+const bookLanguages = [
+  { language: "en", navigationLabel: "Main navigation" },
+  { language: "de", navigationLabel: "Hauptnavigation" },
+  { language: "ru", navigationLabel: "Основная навигация" },
+  { language: "uk", navigationLabel: "Основна навігація" },
+];
+
+for (const langConfig of bookLanguages) {
+  test(`${langConfig.language} books page header renders accessible navigation`, () => {
+    const header = renderSiteHeader({
+      activePage: "books",
+      language: langConfig.language,
+    });
+    const navigation = header.match(/<nav class="site-nav"[\s\S]*?<\/nav>/)?.[0];
+    const links = navigation?.match(/<a [^>]+>[^<]+<\/a>/g) ?? [];
+    const activeLinks = links.filter((link) => link.includes('aria-current="page"'));
+
+    assert.ok(navigation, "header must contain the main navigation");
+    assert.match(navigation, new RegExp(`aria-label="${langConfig.navigationLabel}"`));
+    assert.equal(activeLinks.length, 1);
+    assert.ok(activeLinks[0].includes(">Books</a>"));
+  });
+}
 
 for (const page of pages) {
   test(`${page.path} configures the shared site header`, async () => {
