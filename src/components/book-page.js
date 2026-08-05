@@ -50,7 +50,6 @@ export function renderBookPage({ book, language }) {
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700;900&family=Space+Mono:wght@700&display=swap" rel="stylesheet" />
 
     <link rel="icon" href="../../../assets/svg/favicon.svg" type="image/svg+xml" />
-    <link rel="icon" href="../../../favicon.ico" sizes="any" />
     <link rel="stylesheet" href="../../../css/main.css" />
     <link rel="stylesheet" href="../../../css/book.css" />
 

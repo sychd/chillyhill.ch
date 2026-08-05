@@ -29,7 +29,6 @@ export function renderBooksList({ books, language }) {
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>${label.title} — Chilly Hill</title>
     <link rel="icon" href="../assets/svg/favicon.svg" type="image/svg+xml" />
-    <link rel="icon" href="../favicon.ico" sizes="any" />
     <link rel="stylesheet" href="../css/main.css" />
     <style>
       .books-main {

@@ -16,7 +16,6 @@ const publicEntries = [
   "books",
   "css",
   "js",
-  "favicon.ico",
   "index.html",
   "robots.txt",
 ];
