@@ -12,7 +12,7 @@
     "url": "git+https://github.com/sychd/chillyhill.ch.git"
   },
   "license": "ISC",
-  "author": "dsych",
+  "author": "Denys Sych",
   "type": "module",
   "scripts": {
     "build": "node scripts/build-site.js",

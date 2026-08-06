@@ -31,15 +31,10 @@ export function renderBooksList({ books, language }) {
     <link rel="icon" href="../assets/svg/favicon.svg" type="image/svg+xml" />
     <link rel="stylesheet" href="../css/main.css" />
     <style>
-      .books-main {
-        padding-top: 4rem;
-        padding-bottom: 4rem;
-      }
       .books-grid {
         display: flex;
         flex-wrap: wrap;
         gap: 3rem;
-        margin-top: 3rem;
       }
       .book-item {
         width: 240px;
@@ -90,11 +85,13 @@ export function renderBooksList({ books, language }) {
     
     <!-- @site-header active-page="books" language="${language}" -->
 
-    <main class="books-main max-w-container">
-      <h1>${label.title}</h1>
-      <div class="books-grid">
-        ${booksHtml}
-      </div>
+    <main class="site-main">
+      <article class="books-article max-w-container">
+        <h1>${label.title}</h1>
+        <div class="books-grid">
+          ${booksHtml}
+        </div>
+      </article>
     </main>
 
     <footer class="site-footer">

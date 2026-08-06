@@ -282,21 +282,23 @@ a:focus-visible {
   font-size: var(--text-body-size);
 }
 
-:is(.about-page, .blog-page) .site-main {
+:is(.about-page, .blog-page, .books-page) .site-main {
   align-items: start;
   min-height: calc(100dvh - 11rem);
   padding-block: clamp(1rem, 4vw, 3rem) clamp(2rem, 7vw, 5rem);
 }
 
 .about-article,
-.blog-article {
+.blog-article,
+.books-article {
   display: grid;
   max-width: 46rem;
   gap: var(--space-lg);
 }
 
 .about-article h1,
-.blog-article h1 {
+.blog-article h1,
+.books-article h1 {
   margin: 0;
   font-size: clamp(2.4rem, 8vw, 5rem);
   font-weight: 900;
