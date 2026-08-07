@@ -85,31 +85,34 @@ export async function buildSite() {
     .filter((entry) => entry.isDirectory())
     .sort((left, right) => left.name.localeCompare(right.name));
 
-  const posts = await Promise.all(
-    postDirectories.map(async (directory) => {
-      const metadataPath = path.join(postsDirectory, directory.name, "metadata.json");
-      const metadata = JSON.parse(await readFile(metadataPath, "utf8"));
+  const posts = (
+    await Promise.all(
+      postDirectories.map(async (directory) => {
+        const metadataPath = path.join(postsDirectory, directory.name, "metadata.json");
+        const metadata = JSON.parse(await readFile(metadataPath, "utf8"));
 
-      if (!metadata.name || !metadata.link) {
-        throw new Error(`${metadataPath} must define name and link.`);
-      }
+        if (!metadata.name || !metadata.link || !metadata.date) {
+          throw new Error(`${metadataPath} must define name, link, and date.`);
+        }
 
-      if (
-        metadata.isDescriptionVisible !== undefined &&
-        typeof metadata.isDescriptionVisible !== "boolean"
-      ) {
-        throw new Error(`${metadataPath} must define isDescriptionVisible as a boolean.`);
-      }
+        if (
+          metadata.isDescriptionVisible !== undefined &&
+          typeof metadata.isDescriptionVisible !== "boolean"
+        ) {
+          throw new Error(`${metadataPath} must define isDescriptionVisible as a boolean.`);
+        }
 
-      return {
-        title: metadata.name,
-        description: metadata.description || "",
-        isDescriptionVisible: metadata.isDescriptionVisible === true,
-        link: metadata.link,
-        cover: metadata.cover ? path.posix.join("posts", directory.name, metadata.cover) : "",
-      };
-    }),
-  );
+        return {
+          title: metadata.name,
+          description: metadata.description || "",
+          isDescriptionVisible: metadata.isDescriptionVisible === true,
+          link: metadata.link,
+          date: metadata.date || "",
+          cover: metadata.cover ? path.posix.join("posts", directory.name, metadata.cover) : "",
+        };
+      }),
+    )
+  ).sort((left, right) => right.date.localeCompare(left.date));
 
   const postsIndexPath = path.join(outputDirectory, "blog", "posts", "index.json");
   await writeFile(postsIndexPath, `${JSON.stringify({ posts }, null, 2)}\n`);

@@ -69,6 +69,22 @@ function createPostCard(post) {
     card.append(body);
   }
 
+  if (post.date) {
+    const dateElement = document.createElement("time");
+    dateElement.className = "post-card-date";
+    dateElement.dateTime = post.date;
+
+    const dateObj = new Date(post.date);
+    if (!Number.isNaN(dateObj.getTime())) {
+      dateElement.textContent = dateObj.toLocaleDateString("en-US", {
+        year: "numeric",
+        month: "short",
+        day: "numeric",
+      });
+      card.append(dateElement);
+    }
+  }
+
   return card;
 }
 
