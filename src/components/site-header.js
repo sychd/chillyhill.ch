@@ -18,6 +18,10 @@ const labelsByLanguage = {
     home: "Chilly Hill home",
     navigation: "Main navigation",
   },
+  it: {
+    home: "Pagina iniziale di Chilly Hill",
+    navigation: "Navigazione principale",
+  },
   ru: {
     home: "На главную Chilly Hill",
     navigation: "Основная навигация",

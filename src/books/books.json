@@ -19,6 +19,7 @@
         "languageNames": {
           "en": "English",
           "de": "German",
+          "it": "Italian",
           "ru": "Russian",
           "uk": "Ukrainian"
         }
@@ -39,6 +40,7 @@
         "languageNames": {
           "en": "английскую",
           "de": "немецкую",
+          "it": "итальянскую",
           "ru": "русскую",
           "uk": "украинскую"
         }
@@ -59,8 +61,30 @@
         "languageNames": {
           "en": "Englisch",
           "de": "Deutsch",
+          "it": "Italienisch",
           "ru": "Russisch",
           "uk": "Ukrainisch"
+        }
+      },
+      "it": {
+        "title": "Guida ai Funghi Magici",
+        "description": "Guida ai Funghi Magici — un libro di Chilly Hill. Leggi il libro e scaricalo in formato PDF o ePub.",
+        "lead": "Questo libro ti guida attraverso ogni fase del viaggio psichedelico: dalla preparazione e l'intenzione al lavoro con svolte inaspettate e una dolce integrazione.",
+        "content": "È scritto per coloro che vogliono affrontare l'esperienza con piena responsabilità: per ridurre i rischi, evitare le trappole comuni e riportare intuizioni preziose dal viaggio.",
+        "downloadPdf": "Scarica PDF",
+        "downloadEpub": "Scarica ePub",
+        "readOnline": "Leggi online",
+        "feedbackCopy": "Se questa guida ti ha aiutato, per favore considera di lasciare una recensione su Amazon. Il tuo feedback aiuta altri lettori a trovare una risorsa responsabile — e significa molto per me.",
+        "feedbackLink": "Lascia una recensione",
+        "coverAlt": "Copertina del libro Magic Mushrooms 101",
+        "subscribeNote": "Note occasionali su esperienze psichedeliche più sicure e ponderate — direttamente nella tua casella di posta.",
+        "langLabel": "Lingua",
+        "languageNames": {
+          "en": "Inglese",
+          "de": "Tedesco",
+          "it": "Italiano",
+          "ru": "Russo",
+          "uk": "Ucraino"
         }
       },
       "uk": {
@@ -79,6 +103,7 @@
         "languageNames": {
           "en": "англійську",
           "de": "німецьку",
+          "it": "італійську",
           "ru": "російську",
           "uk": "українську"
         }
