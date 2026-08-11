@@ -61,8 +61,7 @@ export function renderSiteHeader({ activePage, language }) {
   const navigation = navigationItems
     .filter((item) => !hiddenNavigationItems.includes(item.id))
     .map((item) => {
-      const currentPageAttribute =
-        item.id === activePage ? ' aria-current="page"' : "";
+      const currentPageAttribute = item.id === activePage ? ' aria-current="page"' : "";
 
       return `    <a href="${item.href}"${currentPageAttribute}>${item.label}</a>`;
     })
@@ -87,17 +86,12 @@ export function renderSiteHeaderMarker(html, sourceName = "HTML document") {
     (_marker, indentation, activePage, language) => {
       markerCount += 1;
 
-      return indentHtml(
-        renderSiteHeader({ activePage, language }),
-        indentation,
-      );
+      return indentHtml(renderSiteHeader({ activePage, language }), indentation);
     },
   );
 
   if (markerCount > 1) {
-    throw new Error(
-      `${sourceName} must not contain more than one site header marker.`,
-    );
+    throw new Error(`${sourceName} must not contain more than one site header marker.`);
   }
 
   return renderedHtml;
