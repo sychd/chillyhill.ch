@@ -1,7 +1,7 @@
 [
   {
     "id": "magic-mushrooms-101",
-    "amazonLink": "[https://www.amazon.com/dp/B0HCVF94Z2](https://www.amazon.com/dp/B0HCVF94Z2)",
+    "amazonLink": "https://www.amazon.com/dp/B0HCVF94Z2",
     "locales": {
       "en": {
         "title": "Magic Mushrooms Guide",
@@ -112,7 +112,7 @@
   },
   {
     "id": "a-different-perspective",
-    "amazonLink": "[https://www.amazon.com/dp/B0GQ5C3F6R](https://www.amazon.com/dp/B0GQ5C3F6R)",
+    "amazonLink": "https://www.amazon.com/dp/B0GQ5C3F6R",
     "locales": {
       "en": {
         "title": "A Different Perspective",
